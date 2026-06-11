@@ -1,9 +1,15 @@
 # Krrishna Dhwarka Foundation Bharat — Website
 
-![Node.js](https://img.shields.io/badge/Node.js-v22%2B-339933?logo=nodedotjs&logoColor=white)
-![Express](https://img.shields.io/badge/Express-4.x-000000?logo=express)
-![Razorpay](https://img.shields.io/badge/Razorpay-Integrated-02042B?logo=razorpay&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
+<p align="center">
+  <img src="public/images/logo2.png" alt="Krrishna Dhwarka Foundation Bharat" width="220" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-v22%2B-339933?logo=nodedotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/Express-4.x-000000?logo=express" />
+  <img src="https://img.shields.io/badge/Razorpay-Integrated-02042B?logo=razorpay&logoColor=white" />
+  <img src="https://img.shields.io/badge/Status-Complete-brightgreen" />
+</p>
 
 This is a full-stack website I built as part of my internship for **Krrishna Dhwarka Foundation Bharat**, a charitable organization that works towards education and community welfare (*शिक्षा का प्रकाश* — Light of Education).
 
