@@ -1,80 +1,57 @@
-# Krrishna Dhwarka Foundation Bharat — Official Website
+# Krrishna Dhwarka Foundation Bharat — Website
 
-> **Internship Project** | Full-Stack Charity Website with Admin Panel & Razorpay Payment Integration
-
-![Node.js](https://img.shields.io/badge/Node.js-v22%2B-green)
-![Express](https://img.shields.io/badge/Express-4.x-blue)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+![Node.js](https://img.shields.io/badge/Node.js-v22%2B-339933?logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4.x-000000?logo=express)
+![Razorpay](https://img.shields.io/badge/Razorpay-Integrated-02042B?logo=razorpay&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
 
----
+This is a full-stack website I built as part of my internship for **Krrishna Dhwarka Foundation Bharat**, a charitable organization that works towards education and community welfare (*शिक्षा का प्रकाश* — Light of Education).
 
-## About the Project
-
-A fully functional charity/NGO website built for **Krrishna Dhwarka Foundation Bharat** (motto: *शिक्षा का प्रकाश* — Light of Education).
-
-Built as an internship task. The website includes a public-facing website, a complete donation flow with Razorpay payment gateway, instant PDF receipt generation, and a full admin panel — all with zero external database dependencies (uses Node.js 22's built-in SQLite).
+The task was to build a complete charity website from scratch — with a public-facing website, donation collection through Razorpay, automatic PDF receipts, and a full admin panel to manage everything.
 
 ---
 
-## Live Features
+## What I Built
 
-### Public Website
-| Page | Description |
-|------|-------------|
-| **Home** | Hero banner slider (managed from admin), mission/vision, programs, stats, donate CTA |
-| **About Us** | Foundation story, values, programs detail |
-| **Certificates** | Public gallery of certificates uploaded by admin |
-| **Contact / Inquiry** | Inquiry form — submissions go to admin panel |
-| **Donate** | Full Razorpay payment flow with instant PDF receipt download |
+The project has two parts — the public website that anyone can visit, and a private admin panel that only the foundation team uses.
 
-### Admin Panel (`/admin/`)
-| Section | Features |
-|---------|----------|
-| **Dashboard** | Live stats — total donations, payment count, inquiry count, certificates |
-| **Inquiries** | View all, mark read/unread, delete |
-| **Donations** | Full payment history with status, download PDF receipt for any payment |
-| **Certificates** | Upload (JPG/PNG/PDF), view, delete |
-| **Banners** | Upload home page hero banners, activate/deactivate, sort order, delete |
-| **Settings** | Change admin password |
+**Public Website**
 
----
+There are five pages. The home page has a banner slider where images are managed through the admin panel, along with sections about the foundation's mission, programs, and a donate button. The About page goes deeper into the story and values. The Certificates page shows all registration/award certificates uploaded by the admin. The Contact page has an inquiry form that goes straight into the admin panel. And the Donate page is where the actual payment happens.
 
-## Tech Stack
+**Admin Panel**
 
-| Layer | Technology |
-|-------|-----------|
-| **Backend** | Node.js v22+, Express.js |
-| **Database** | SQLite via Node.js built-in `node:sqlite` (no install needed) |
-| **Payments** | Razorpay Payment Gateway |
-| **PDF Generation** | PDFKit |
-| **Auth** | JWT (jsonwebtoken) + bcryptjs |
-| **File Uploads** | Multer |
-| **Frontend** | Vanilla HTML5, CSS3, JavaScript (no frameworks) |
+Accessible at `/admin/` with login. From here, the admin can:
+- Read and manage all contact inquiries (mark read, delete)
+- See all donations with full donor info, and download a PDF receipt for any payment
+- Upload certificates (images or PDFs) that show up on the public certificates page
+- Upload/manage home page banner images — activate, deactivate, or delete them
+- Change the admin password
 
-> **Zero native dependencies** — runs on any Windows/Mac/Linux with Node.js 22+
+**Donation Flow**
+
+When someone donates, they fill in their details (name, email, phone, PAN for 80G), pick an amount, and click pay. This creates a Razorpay order on the backend, opens the Razorpay popup, and after successful payment the signature is verified server-side. Then a PDF receipt is generated on the fly and downloaded automatically. The same receipt can be re-downloaded from the admin panel anytime.
 
 ---
 
-## How to Run Locally (for reviewers)
+## Running This Locally
 
-### Prerequisites
-- **Node.js v22 or higher** — [Download here](https://nodejs.org)
-- A free Razorpay account — [Sign up here](https://razorpay.com) (for payment testing)
+You'll need **Node.js v22 or higher** — the project uses the built-in `node:sqlite` module that comes with Node 22, so there's no native database installation needed.
 
-### Step 1 — Clone the repo
+**1. Clone the repo**
 ```bash
-git clone https://github.com/YOUR_USERNAME/krrishna-dhwarka-foundation.git
+git clone https://github.com/Anime123450/krrishna-dhwarka-foundation.git
 cd krrishna-dhwarka-foundation
 ```
 
-### Step 2 — Install dependencies
+**2. Install dependencies**
 ```bash
 npm install
 ```
 
-### Step 3 — Configure environment
-Copy `.env.example` to `.env`:
+**3. Set up environment variables**
+
+Copy the example file:
 ```bash
 # Windows
 copy .env.example .env
@@ -83,89 +60,67 @@ copy .env.example .env
 cp .env.example .env
 ```
 
-Open `.env` and add your Razorpay test keys:
-```env
-PORT=3000
-JWT_SECRET=any-secret-string-here
+Open `.env` and fill in your Razorpay test keys. You can get them for free from [dashboard.razorpay.com](https://dashboard.razorpay.com) → Settings → API Keys → Generate Test Key.
 
+```
 RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxx
-RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxxxxxxxxxx
+RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxx
 ```
 
-> **Note:** You can get free test keys from [Razorpay Dashboard](https://dashboard.razorpay.com) → Settings → API Keys → Generate Test Key. No real money is involved in test mode.
-
-### Step 4 — Start the server
+**4. Start the server**
 ```bash
 npm start
 ```
 
-You should see:
+The terminal will show:
 ```
 🏛  Krrishna Dhwarka Foundation running at http://localhost:3000
 🔑  Admin panel: http://localhost:3000/admin/
 👤  Login: admin / admin123
 ```
 
-### Step 5 — Open in browser
-| URL | Description |
-|-----|-------------|
-| `http://localhost:3000` | Public website |
-| `http://localhost:3000/admin/` | Admin panel |
+**5. Open in browser**
+
+- Website → `http://localhost:3000`
+- Admin panel → `http://localhost:3000/admin/`
 
 ---
 
 ## Test Credentials
 
-### Admin Panel
-| Field | Value |
-|-------|-------|
-| Username | `admin` |
-| Password | `admin123` |
+**Admin login**
+- Username: `admin`
+- Password: `admin123`
 
-### Razorpay Test Payment (card)
-| Field | Value |
-|-------|-------|
-| Card Number | `4111 1111 1111 1111` |
-| Expiry | Any future date (e.g., `12/26`) |
-| CVV | `123` |
-| OTP | `1234` |
+**Razorpay test card** (no real money, just for testing)
+- Card: `4111 1111 1111 1111`
+- Expiry: any future date
+- CVV: `123`
+- OTP: `1234`
 
 ---
 
-## How to Review / Test the Work
+## How to Check the Work
 
-Follow this sequence to see all features in action:
+Here's the flow I'd suggest to see everything working:
 
-### 1. Test the public website
-- Visit `http://localhost:3000` — home page with nav, sections, footer
-- Visit `/about.html` — about page
-- Visit `/contact.html` — fill and submit the inquiry form
+1. Open the home page — check the nav, sections, footer, mobile responsiveness
+2. Go to the Contact page → submit an inquiry form
+3. Log into the admin panel → the inquiry appears under Inquiries
+4. In admin, go to Banners → upload any image → go back to the home page and refresh — it shows in the slider
+5. In admin, go to Certificates → upload a file → check the public Certificates page
+6. Go to the Donate page → pick ₹500 → fill in any test details → click Pay → use the test card above
+7. After payment, a PDF receipt downloads automatically
+8. Back in admin under Donations, find that payment and click the PDF button — same receipt from admin side
+9. Try the Settings page to change the admin password
 
-### 2. Test the admin panel
-- Go to `http://localhost:3000/admin/` → Login with `admin / admin123`
-- **Dashboard** — see live stats
-- **Inquiries** — the inquiry you just submitted will appear here, mark it as read
-- **Banners** — upload any JPG image → it will appear in the home page hero slider
-- **Certificates** — upload a JPG/PNG/PDF → it appears on `/certificates.html`
+---
 
-### 3. Test the donation + payment receipt
-- Go to `http://localhost:3000/donate.html`
-- Select an amount (e.g., ₹500)
-- Fill in Name, Email, Phone, PAN (any values for testing)
-- Click **Proceed to Pay**
-- In Razorpay popup → use the test card above
-- After payment → a PDF receipt downloads automatically
-- Back in admin panel → **Donations** → click **PDF** button to download receipt from admin side
+## Tech Stack
 
-### 4. Verify PDF receipt
-The generated PDF includes:
-- Foundation header with name and branding
-- Receipt ID, donor name, email, phone, PAN
-- Purpose of donation
-- Amount in digits and words (Indian number system: Lakh, Crore)
-- Payment status badge
-- 80G tax exemption note
-- Transaction ID from Razorpay
+I used Node.js with Express for the backend. For the database, I used the built-in `node:sqlite` module that ships with Node.js 22 — this means no external database setup needed, it just works. Razorpay handles payments and I verify the payment signature on the server before marking anything as completed. PDFKit generates the receipts. Multer handles file uploads. JWT + bcrypt handle admin authentication.
+
+The frontend is plain HTML, CSS, and vanilla JavaScript — no React or any framework. The admin panel is a single-page app built entirely in one HTML file with inline JavaScript switching between sections. The design uses the foundation's navy blue and gold color scheme.
 
 ---
 
@@ -173,123 +128,56 @@ The generated PDF includes:
 
 ```
 krrishna-dhwarka-foundation/
-├── server.js                   # Express server — all routes, DB, auth, PDF
+├── server.js                  # All backend logic — routes, DB, auth, PDF
 ├── package.json
-├── .env.example                # Environment variable template
+├── .env.example               # Copy this to .env and add your keys
 │
-└── public/                     # All static files served directly
-    ├── index.html              # Home page
-    ├── about.html              # About Us
-    ├── contact.html            # Contact + Inquiry form
-    ├── certificates.html       # Public certificates gallery
-    ├── donate.html             # Donation form + Razorpay integration
-    │
-    ├── css/
-    │   └── style.css           # Complete shared stylesheet (~600 lines)
-    │
-    ├── js/
-    │   └── main.js             # Shared JS — slider, cert loading, utilities
-    │
-    ├── images/
-    │   └── logo.png            # Foundation logo (place here)
-    │
-    ├── admin/
-    │   └── index.html          # Full admin SPA (single-page app, ~700 lines)
-    │
-    └── uploads/
-        ├── certificates/       # Certificate files uploaded via admin
-        └── banners/            # Banner images uploaded via admin
+└── public/
+    ├── index.html             # Home page
+    ├── about.html             # About Us
+    ├── contact.html           # Contact + inquiry form
+    ├── certificates.html      # Public certificates gallery
+    ├── donate.html            # Donation + Razorpay payment
+    ├── css/style.css          # All styling
+    ├── js/main.js             # Shared JS (slider, cert loading)
+    ├── images/logo.png        # Foundation logo
+    ├── admin/index.html       # Complete admin panel (SPA)
+    └── uploads/               # Files uploaded via admin
+        ├── certificates/
+        └── banners/
 ```
 
 ---
 
-## API Endpoints
+## API Overview
 
-### Public
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/inquiry` | Submit contact inquiry |
-| `GET` | `/api/banners` | Get active banners |
-| `GET` | `/api/certificates` | Get all certificates |
-| `POST` | `/api/donation/create-order` | Create Razorpay order |
-| `POST` | `/api/donation/verify` | Verify payment signature |
-| `GET` | `/api/receipt/:receiptId` | Download PDF receipt |
+**Public routes** (no auth needed):
+- `POST /api/inquiry` — submit contact form
+- `GET /api/banners` — get active banners for home slider
+- `GET /api/certificates` — get all certificates
+- `POST /api/donation/create-order` — create Razorpay order
+- `POST /api/donation/verify` — verify payment signature
+- `GET /api/receipt/:id` — download PDF receipt
 
-### Admin (JWT required)
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/admin/login` | Admin login → returns JWT |
-| `GET` | `/api/admin/stats` | Dashboard statistics |
-| `GET` | `/api/admin/inquiries` | All inquiries |
-| `PATCH` | `/api/admin/inquiries/:id/read` | Mark inquiry as read |
-| `DELETE` | `/api/admin/inquiries/:id` | Delete inquiry |
-| `GET` | `/api/admin/donations` | All donation records |
-| `GET` | `/api/admin/receipt/:id` | Download receipt PDF (admin) |
-| `POST` | `/api/admin/certificates` | Upload certificate |
-| `DELETE` | `/api/admin/certificates/:id` | Delete certificate |
-| `GET` | `/api/admin/banners` | All banners (including inactive) |
-| `POST` | `/api/admin/banners` | Upload banner |
-| `PATCH` | `/api/admin/banners/:id/toggle` | Toggle banner active status |
-| `DELETE` | `/api/admin/banners/:id` | Delete banner |
-| `POST` | `/api/admin/change-password` | Change admin password |
+**Admin routes** (JWT required):
+- `POST /api/admin/login` — login, returns JWT token
+- `GET /api/admin/stats` — dashboard numbers
+- `GET/PATCH/DELETE /api/admin/inquiries` — manage inquiries
+- `GET /api/admin/donations` — view all donations
+- `GET /api/admin/receipt/:id` — download any receipt
+- `POST/DELETE /api/admin/certificates` — manage certificates
+- `GET/POST/PATCH/DELETE /api/admin/banners` — manage banners
+- `POST /api/admin/change-password` — update admin password
 
 ---
 
-## Database Schema
+## Notes
 
-The app auto-creates a SQLite database (`foundation.db`) on first run with these tables:
-
-```sql
-inquiries   — id, name, email, phone, subject, message, is_read, created_at
-donations   — id, receipt_id, razorpay_order_id, razorpay_payment_id,
-              donor_name, donor_email, donor_phone, donor_pan,
-              amount, purpose, address, payment_status, created_at
-certificates — id, title, description, filename, uploaded_at
-banners      — id, title, filename, is_active, sort_order, uploaded_at
-admins       — id, username, password (bcrypt hashed)
-```
+- The `.env` file is in `.gitignore` so your Razorpay keys are never uploaded to GitHub
+- The database (`foundation.db`) is also gitignored — it gets created automatically the first time you run the server
+- Uploaded files in `public/uploads/` are gitignored too since they'd make the repo unnecessarily large
+- The admin password is hashed with bcrypt before being stored in the database
 
 ---
 
-## Design
-
-- **Color scheme:** Deep navy `#1a1f4e` + Gold `#c9a84c` — matching the foundation's official seal
-- **Responsive:** Works on mobile, tablet, and desktop
-- **No frameworks:** Pure HTML/CSS/JS — no React, Vue, or Bootstrap
-- **Admin:** Full single-page application with JWT auth, built without any UI framework
-
----
-
-## Free Deployment Options
-
-To host this website for free:
-
-### Option 1 — Render.com (Recommended)
-1. Push code to GitHub
-2. Go to [render.com](https://render.com) → New → Web Service
-3. Connect GitHub repo
-4. Set environment variables (from `.env`)
-5. Start command: `npm start`
-6. Free URL: `https://your-app.onrender.com`
-
-### Option 2 — Railway.app
-1. Go to [railway.app](https://railway.app) → Deploy from GitHub
-2. Add environment variables
-3. Free tier includes $5 credit/month
-
-> **Note on file uploads:** Free hosting tiers reset uploaded files on redeploy. For production, integrate [Cloudinary](https://cloudinary.com) (free tier) for persistent file storage.
-
----
-
-## Internship Details
-
-- **Task:** Build a complete charity website with admin panel and payment integration
-- **Client:** Krrishna Dhwarka Foundation Bharat
-- **Built by:** Animesh Sharma
-- **Tech:** Full-stack Node.js — backend, frontend, database, payments, PDF generation
-
----
-
-## License
-
-MIT — free to use, modify, and distribute.
+*Built by Animesh Sharma — Internship project for Krrishna Dhwarka Foundation Bharat*

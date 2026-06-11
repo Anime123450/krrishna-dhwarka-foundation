@@ -4,6 +4,9 @@ node_modules/
 # Environment variables (NEVER commit this)
 .env
 
+# Claude Code config
+.claude/
+
 # Database (auto-created on start)
 foundation.db
 *.db
