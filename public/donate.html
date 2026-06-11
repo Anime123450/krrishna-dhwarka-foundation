@@ -66,14 +66,15 @@
           <!-- Amount Selection -->
           <div class="form-group">
             <label>Donation Amount (₹) <span class="req">*</span></label>
-            <div class="amount-grid">
-              <button type="button" class="amount-btn" data-amount="500">₹500</button>
-              <button type="button" class="amount-btn" data-amount="1000">₹1,000</button>
-              <button type="button" class="amount-btn" data-amount="2100">₹2,100</button>
-              <button type="button" class="amount-btn" data-amount="5000">₹5,000</button>
-              <button type="button" class="amount-btn" data-amount="11000">₹11,000</button>
-              <button type="button" class="amount-btn" data-amount="custom">Custom</button>
-            </div>
+            <select id="amountSelect" style="width:100%;padding:.85rem 1rem;border:1.5px solid var(--border);border-radius:8px;font-size:1rem;color:var(--navy);background:white;cursor:pointer;appearance:auto">
+              <option value="">— Select an amount —</option>
+              <option value="500">₹500 — Books for 2 students</option>
+              <option value="1000">₹1,000 — School supplies kit</option>
+              <option value="2100">₹2,100 — 1 month scholarship</option>
+              <option value="5000">₹5,000 — Health camp support</option>
+              <option value="11000">₹11,000 — Full year scholarship</option>
+              <option value="custom">Custom amount…</option>
+            </select>
             <div class="custom-amount-wrap" id="customAmountWrap" style="display:none;margin-top:.8rem">
               <span class="rupee-prefix">₹</span>
               <input type="number" id="customAmount" placeholder="Enter amount" min="1" step="1">
@@ -216,22 +217,18 @@
 <script>
 let selectedAmount = null;
 
-// Amount button selection
-document.querySelectorAll('.amount-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-    this.classList.add('selected');
-    const val = this.dataset.amount;
-    const customWrap = document.getElementById('customAmountWrap');
-    if (val === 'custom') {
-      customWrap.style.display = 'flex';
-      selectedAmount = null;
-      document.getElementById('customAmount').focus();
-    } else {
-      customWrap.style.display = 'none';
-      selectedAmount = parseFloat(val);
-    }
-  });
+// Dropdown amount selection
+document.getElementById('amountSelect').addEventListener('change', function() {
+  const val = this.value;
+  const customWrap = document.getElementById('customAmountWrap');
+  if (val === 'custom') {
+    customWrap.style.display = 'flex';
+    selectedAmount = null;
+    document.getElementById('customAmount').focus();
+  } else {
+    customWrap.style.display = 'none';
+    selectedAmount = val ? parseFloat(val) : null;
+  }
 });
 
 document.getElementById('customAmount').addEventListener('input', function() {
@@ -243,9 +240,12 @@ document.getElementById('donateForm').addEventListener('submit', async function(
   const errEl = document.getElementById('donateError');
   errEl.style.display = 'none';
 
-  const customInput = document.getElementById('customAmount');
-  if (!selectedAmount && customInput.style.display !== 'none') {
-    selectedAmount = parseFloat(customInput.value);
+  const customWrap = document.getElementById('customAmountWrap');
+  if (!selectedAmount && customWrap.style.display !== 'none') {
+    selectedAmount = parseFloat(document.getElementById('customAmount').value);
+  }
+  if (!selectedAmount && document.getElementById('amountSelect').value && document.getElementById('amountSelect').value !== 'custom') {
+    selectedAmount = parseFloat(document.getElementById('amountSelect').value);
   }
 
   if (!selectedAmount || selectedAmount < 1) {
