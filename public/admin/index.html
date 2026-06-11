@@ -285,7 +285,9 @@
       width:120px; height:120px; border-radius:50%;
       background:rgba(255,255,255,.06);
     }
+    .stat-card { cursor:pointer; }
     .stat-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
+    .stat-card:active { transform:translateY(-2px); }
     .stat-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem; }
     .stat-icon {
       width:44px; height:44px; border-radius:12px;
@@ -329,7 +331,8 @@
       transition:background var(--transition);
     }
     .data-table tbody tr { transition:background var(--transition); }
-    .data-table tbody tr:hover td { background:var(--bg2); }
+    .data-table tbody tr[onclick]:hover td { background:var(--bg2); }
+    .data-table tbody tr[onclick]:hover { box-shadow:inset 3px 0 0 var(--gold); }
     .data-table tbody tr:last-child td { border-bottom:none; }
     .td-name { font-weight:600; color:var(--text); }
     .td-email a { color:var(--navy); text-decoration:none; font-size:.82rem; }
@@ -578,54 +581,55 @@
       <!-- ── Dashboard ────────────────────────────────────────────────────── -->
       <div id="panel-dashboard" class="panel active">
         <div class="stats-grid">
-          <div class="stat-card">
+          <div class="stat-card" onclick="switchPanel('payments')" title="View all donations">
             <div class="stat-card-top">
               <div class="stat-icon">💰</div>
               <span class="stat-trend">Total</span>
             </div>
             <div class="stat-value" id="statTotal">₹0</div>
-            <div class="stat-label">Donations Received</div>
+            <div class="stat-label">Donations Received ↗</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" onclick="switchPanel('payments')" title="View all payments">
             <div class="stat-card-top">
               <div class="stat-icon">✅</div>
               <span class="stat-trend">Paid</span>
             </div>
             <div class="stat-value" id="statCount">0</div>
-            <div class="stat-label">Successful Payments</div>
+            <div class="stat-label">Successful Payments ↗</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" onclick="switchPanel('inquiries')" title="View all inquiries">
             <div class="stat-card-top">
               <div class="stat-icon">📩</div>
               <span class="stat-trend" id="unreadTrend">—</span>
             </div>
             <div class="stat-value" id="statInq">0</div>
-            <div class="stat-label">Total Inquiries</div>
+            <div class="stat-label">Total Inquiries ↗</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" onclick="switchPanel('certificates')" title="Manage certificates">
             <div class="stat-card-top">
               <div class="stat-icon">🏆</div>
               <span class="stat-trend">Uploaded</span>
             </div>
             <div class="stat-value" id="statCert">0</div>
-            <div class="stat-label">Certificates</div>
+            <div class="stat-label">Certificates ↗</div>
           </div>
         </div>
 
         <!-- Charts row -->
         <div class="dash-chart-row">
           <div class="card">
-            <div class="card-header">
+            <div class="card-header" onclick="switchPanel('payments')" style="cursor:pointer" title="View all donations">
               <h3><span class="h-icon">📈</span> Monthly Donations</h3>
-              <span style="font-size:.77rem;color:var(--muted)">Last 6 months</span>
+              <span style="font-size:.77rem;color:var(--muted)">Last 6 months · click to view all ↗</span>
             </div>
             <div class="card-body">
               <div class="chart-wrap"><canvas id="chartDonations"></canvas></div>
             </div>
           </div>
           <div class="card">
-            <div class="card-header">
+            <div class="card-header" onclick="switchPanel('inquiries')" style="cursor:pointer" title="View all inquiries">
               <h3><span class="h-icon">🎯</span> Inquiry Breakdown</h3>
+              <span style="font-size:.77rem;color:var(--muted)">click to view all ↗</span>
             </div>
             <div class="card-body" style="padding-top:.9rem">
               <div class="donut-wrap"><canvas id="chartInquiries"></canvas></div>
@@ -982,12 +986,13 @@ function initCharts(donations, inquiries) {
     const pending = donations.filter(d => d.payment_status!=='completed').length;
     const unread  = inquiries.filter(i => !i.is_read).length;
     qs.innerHTML = [
-      {icon:'✅',bg:'rgba(16,185,129,.12)',col:'#10b981', label:'Completed Payments', val:paid},
-      {icon:'⏳',bg:'rgba(245,158,11,.12)', col:'#d97706', label:'Pending Payments',   val:pending},
-      {icon:'📩',bg:'rgba(59,130,246,.12)', col:'#3b82f6', label:'Unread Inquiries',   val:unread},
-    ].map(s=>`<div class="quick-stat">
+      {icon:'✅',bg:'rgba(16,185,129,.12)',col:'#10b981', label:'Completed Payments', val:paid,    panel:'payments'},
+      {icon:'⏳',bg:'rgba(245,158,11,.12)', col:'#d97706', label:'Pending Payments',   val:pending, panel:'payments'},
+      {icon:'📩',bg:'rgba(59,130,246,.12)', col:'#3b82f6', label:'Unread Inquiries',   val:unread,  panel:'inquiries'},
+    ].map(s=>`<div class="quick-stat" onclick="switchPanel('${s.panel}')" style="cursor:pointer" title="Go to ${s.panel}">
       <div class="qs-icon" style="background:${s.bg};color:${s.col}">${s.icon}</div>
       <div><div class="qs-label">${s.label}</div><div class="qs-val">${s.val}</div></div>
+      <span style="margin-left:auto;font-size:.75rem;color:var(--muted)">↗</span>
     </div>`).join('');
   }
 }
@@ -1013,7 +1018,7 @@ async function loadDashboard() {
     allDonations = await api('/api/admin/donations');
     const recent = allDonations.filter(d => d.payment_status==='completed').slice(0,5);
     const tbody = document.querySelector('#recentDonations tbody');
-    tbody.innerHTML = recent.length ? recent.map(d => `<tr>
+    tbody.innerHTML = recent.length ? recent.map(d => `<tr onclick="switchPanel('payments')" style="cursor:pointer" title="View all donations">
       <td class="td-name">${esc(d.donor_name)}</td>
       <td><span style="color:#10b981;font-weight:700">₹${parseFloat(d.amount).toLocaleString('en-IN')}</span></td>
       <td style="color:var(--muted);font-size:.8rem">${fmtDate(d.created_at)}</td>
@@ -1024,7 +1029,7 @@ async function loadDashboard() {
     allInquiries = await api('/api/admin/inquiries');
     const recent = allInquiries.slice(0,5);
     const tbody = document.querySelector('#recentInquiries tbody');
-    tbody.innerHTML = recent.length ? recent.map(i => `<tr>
+    tbody.innerHTML = recent.length ? recent.map(i => `<tr onclick="switchPanel('inquiries')" style="cursor:pointer" title="View all inquiries">
       <td class="td-name">${esc(i.name)} ${!i.is_read?'<span class="badge badge-new">NEW</span>':''}</td>
       <td style="color:var(--text2);font-size:.82rem">${esc(i.subject||'General')}</td>
       <td style="color:var(--muted);font-size:.8rem">${fmtDate(i.created_at)}</td>
