@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Environment variables (NEVER commit this)
+.env
+
+# Database (auto-created on start)
+foundation.db
+*.db
+
+# Uploaded files (too large for git)
+public/uploads/certificates/*
+public/uploads/banners/*
+
+# Keep the upload directories
+!public/uploads/certificates/.gitkeep
+!public/uploads/banners/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.idea/

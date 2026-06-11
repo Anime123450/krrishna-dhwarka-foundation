@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel – Krrishna Dhwarka Foundation Bharat</title>
+  <style>
+    :root {
+      --navy:#1a1f4e; --navy-dark:#12163a; --navy-light:#2a316e;
+      --gold:#c9a84c; --gold-pale:#f5e6c8;
+      --cream:#fdf8f0; --border:#e8dcc8;
+      --text:#222; --muted:#666;
+      --success:#28a745; --danger:#dc3545; --warn:#ffc107;
+      --sidebar:240px;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:#f4f6fb; color:var(--text); }
+
+    /* ── Login ─────────────────────────────────────────────────────────── */
+    #loginScreen {
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 60%,#2c3580 100%);
+    }
+    .login-card {
+      background:white; border-radius:16px; padding:3rem; width:100%; max-width:420px;
+      box-shadow:0 20px 60px rgba(0,0,0,.3);
+    }
+    .login-logo { text-align:center; margin-bottom:2rem; }
+    .login-logo .logo-circle {
+      width:80px; height:80px; border-radius:50%; background:var(--navy);
+      margin:0 auto 1rem; display:flex; align-items:center; justify-content:center;
+      font-size:2rem; font-weight:900; color:var(--gold); border:3px solid var(--gold);
+      overflow:hidden;
+    }
+    .login-logo .logo-circle img { width:100%; height:100%; object-fit:cover; }
+    .login-logo h2 { color:var(--navy); font-size:1.2rem; }
+    .login-logo p  { color:var(--muted); font-size:.85rem; margin-top:.3rem; }
+    .form-group { margin-bottom:1.2rem; }
+    .form-group label { display:block; margin-bottom:.5rem; font-weight:600; color:var(--navy); font-size:.9rem; }
+    .form-group input {
+      width:100%; padding:.8rem 1rem; border:1.5px solid var(--border); border-radius:8px;
+      font-size:.95rem; transition:.2s;
+    }
+    .form-group input:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,168,76,.15); }
+    .btn { display:inline-block; padding:.75rem 1.5rem; border-radius:8px; font-weight:600; font-size:.9rem; cursor:pointer; border:none; transition:.2s; }
+    .btn-primary { background:var(--navy); color:white; width:100%; padding:1rem; font-size:1rem; }
+    .btn-primary:hover { background:var(--navy-light); }
+    .login-error { background:#f8d7da; color:#721c24; padding:.8rem 1rem; border-radius:6px; margin-bottom:1rem; font-size:.9rem; display:none; }
+
+    /* ── Admin Layout ──────────────────────────────────────────────────── */
+    #adminApp { display:none; min-height:100vh; }
+    .admin-sidebar {
+      position:fixed; top:0; left:0; bottom:0; width:var(--sidebar);
+      background:var(--navy-dark); color:white; overflow-y:auto;
+      display:flex; flex-direction:column;
+    }
+    .sidebar-header { padding:1.5rem; border-bottom:1px solid rgba(255,255,255,.1); }
+    .sidebar-logo { display:flex; align-items:center; gap:.8rem; }
+    .s-logo-circle {
+      width:42px; height:42px; border-radius:50%; background:var(--gold);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.1rem; font-weight:900; color:var(--navy); flex-shrink:0; overflow:hidden;
+    }
+    .s-logo-circle img { width:100%; height:100%; object-fit:cover; }
+    .sidebar-brand-name { font-size:.8rem; font-weight:700; color:var(--gold); line-height:1.3; }
+    .sidebar-brand-sub  { font-size:.65rem; color:rgba(255,255,255,.5); }
+    .sidebar-nav { padding:1rem 0; flex:1; }
+    .sidebar-nav a {
+      display:flex; align-items:center; gap:.75rem; padding:.75rem 1.5rem;
+      color:rgba(255,255,255,.7); font-size:.9rem; cursor:pointer;
+      transition:.2s; text-decoration:none; border:none; background:none; width:100%;
+    }
+    .sidebar-nav a:hover { color:white; background:rgba(255,255,255,.07); }
+    .sidebar-nav a.active { color:var(--gold); background:rgba(201,168,76,.12); border-left:3px solid var(--gold); }
+    .sidebar-nav a .icon { font-size:1.1rem; width:20px; text-align:center; }
+    .sidebar-nav a .badge {
+      margin-left:auto; background:var(--danger); color:white;
+      font-size:.7rem; padding:.15rem .5rem; border-radius:50px; font-weight:700;
+    }
+    .sidebar-footer { padding:1rem 1.5rem; border-top:1px solid rgba(255,255,255,.1); font-size:.8rem; color:rgba(255,255,255,.4); }
+
+    /* ── Main content ──────────────────────────────────────────────────── */
+    .admin-main { margin-left:var(--sidebar); min-height:100vh; display:flex; flex-direction:column; }
+    .admin-topbar {
+      background:white; border-bottom:1px solid var(--border); padding:.9rem 2rem;
+      display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,.06);
+    }
+    .admin-topbar h2 { font-size:1.1rem; color:var(--navy); }
+    .admin-user { display:flex; align-items:center; gap:.6rem; color:var(--muted); font-size:.9rem; }
+    .admin-user .avatar { width:34px; height:34px; border-radius:50%; background:var(--navy); color:var(--gold); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.9rem; }
+    .logout-btn { background:none; border:1px solid var(--border); padding:.4rem .9rem; border-radius:6px; cursor:pointer; font-size:.85rem; color:var(--muted); transition:.2s; }
+    .logout-btn:hover { border-color:var(--danger); color:var(--danger); }
+    .admin-content { padding:2rem; flex:1; }
+
+    /* ── Panels ────────────────────────────────────────────────────────── */
+    .panel { display:none; }
+    .panel.active { display:block; }
+
+    /* ── Stats cards ───────────────────────────────────────────────────── */
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; margin-bottom:2rem; }
+    .stat-card {
+      background:white; border-radius:12px; padding:1.5rem;
+      border-left:4px solid var(--gold); box-shadow:0 2px 12px rgba(0,0,0,.06);
+    }
+    .stat-card .s-value { font-size:2rem; font-weight:900; color:var(--navy); line-height:1; }
+    .stat-card .s-label { color:var(--muted); font-size:.85rem; margin-top:.4rem; }
+    .stat-card .s-icon  { font-size:2rem; float:right; margin-top:-.5rem; opacity:.3; }
+
+    /* ── Data table ────────────────────────────────────────────────────── */
+    .card { background:white; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,.06); overflow:hidden; }
+    .card-header { padding:1.2rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .card-header h3 { font-size:1rem; color:var(--navy); }
+    .card-body { padding:1.5rem; }
+    .data-table { width:100%; border-collapse:collapse; font-size:.875rem; }
+    .data-table th { padding:.8rem 1rem; text-align:left; background:var(--cream); color:var(--navy); font-weight:600; font-size:.8rem; text-transform:uppercase; letter-spacing:.5px; border-bottom:1px solid var(--border); }
+    .data-table td { padding:.9rem 1rem; border-bottom:1px solid #f0f0f0; vertical-align:middle; }
+    .data-table tr:hover td { background:#fafafa; }
+    .data-table tr:last-child td { border-bottom:none; }
+    .badge-status { padding:.25rem .7rem; border-radius:50px; font-size:.75rem; font-weight:600; }
+    .badge-success { background:#d4edda; color:#155724; }
+    .badge-pending { background:#fff3cd; color:#856404; }
+    .badge-danger  { background:#f8d7da; color:#721c24; }
+    .badge-unread  { background:#cce5ff; color:#004085; }
+    .btn-sm { padding:.35rem .8rem; font-size:.8rem; border-radius:6px; }
+    .btn-danger { background:var(--danger); color:white; }
+    .btn-danger:hover { background:#c82333; }
+    .btn-success { background:var(--success); color:white; }
+    .btn-success:hover { background:#218838; }
+    .btn-gold { background:var(--gold); color:var(--navy); }
+    .btn-gold:hover { background:#b8923e; }
+    .btn-outline-navy { border:1px solid var(--navy); color:var(--navy); background:none; }
+    .btn-outline-navy:hover { background:var(--navy); color:white; }
+    .action-btns { display:flex; gap:.4rem; }
+    .empty-state { text-align:center; padding:3rem; color:var(--muted); }
+    .empty-state .icon { font-size:3rem; margin-bottom:1rem; }
+
+    /* ── Upload form ───────────────────────────────────────────────────── */
+    .upload-form { background:var(--cream); border-radius:12px; padding:1.5rem; border:2px dashed var(--border); margin-bottom:2rem; transition:.2s; }
+    .upload-form:hover { border-color:var(--gold); }
+    .upload-form h3 { color:var(--navy); margin-bottom:1.2rem; font-size:1rem; }
+    .upload-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; align-items:end; }
+    .f-group { display:flex; flex-direction:column; gap:.4rem; }
+    .f-group label { font-size:.85rem; font-weight:600; color:var(--navy); }
+    .f-group input, .f-group textarea, .f-group select {
+      padding:.65rem .9rem; border:1.5px solid var(--border); border-radius:8px;
+      font-size:.9rem; background:white;
+    }
+    .f-group input:focus,.f-group textarea:focus { outline:none; border-color:var(--gold); }
+    .upload-note { color:var(--muted); font-size:.8rem; margin-top:.5rem; }
+
+    /* ── Cert/Banner grid ──────────────────────────────────────────────── */
+    .media-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1.2rem; }
+    .media-item { background:white; border-radius:10px; overflow:hidden; border:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .media-thumb { height:140px; background:var(--cream); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .media-thumb img { width:100%; height:100%; object-fit:cover; }
+    .media-thumb .pdf-ico { font-size:3rem; }
+    .media-info { padding:1rem; }
+    .media-info h4 { font-size:.85rem; color:var(--navy); margin-bottom:.3rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .media-info p  { font-size:.75rem; color:var(--muted); margin:0; }
+    .media-actions { padding:.8rem 1rem; border-top:1px solid var(--border); display:flex; gap:.5rem; }
+
+    /* ── Toast ─────────────────────────────────────────────────────────── */
+    .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.9rem 1.5rem; border-radius:10px; color:white; font-weight:600; z-index:9999; animation:slideIn .3s; box-shadow:0 4px 20px rgba(0,0,0,.2); }
+    .toast.success { background:var(--success); }
+    .toast.error   { background:var(--danger); }
+    @keyframes slideIn { from{transform:translateX(120%);opacity:0} to{transform:translateX(0);opacity:1} }
+
+    /* ── Modal ─────────────────────────────────────────────────────────── */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:500; display:flex; align-items:center; justify-content:center; }
+    .modal { background:white; border-radius:14px; padding:2rem; max-width:480px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.3); }
+    .modal h3 { color:var(--navy); margin-bottom:1rem; }
+    .modal-actions { display:flex; gap:1rem; margin-top:1.5rem; justify-content:flex-end; }
+
+    /* ── Responsive ────────────────────────────────────────────────────── */
+    @media(max-width:900px) {
+      .stats-grid { grid-template-columns:repeat(2,1fr); }
+      .upload-row { grid-template-columns:1fr; }
+    }
+    @media(max-width:700px) {
+      .admin-sidebar { transform:translateX(-100%); z-index:200; transition:.3s; }
+      .admin-sidebar.open { transform:translateX(0); }
+      .admin-main { margin-left:0; }
+      .stats-grid { grid-template-columns:1fr 1fr; }
+    }
+
+    /* ── Inquiry detail ────────────────────────────────────────────────── */
+    .inq-detail { background:var(--cream); border-radius:10px; padding:1.2rem; margin-top:1rem; font-size:.9rem; }
+    .inq-detail p { margin-bottom:.5rem; }
+    .inq-detail strong { color:var(--navy); }
+  </style>
+</head>
+<body>
+
+<!-- ══ LOGIN ════════════════════════════════════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-circle">
+        <img src="/images/logo.png" alt="Logo" onerror="this.style.display='none';this.parentElement.textContent='K'">
+      </div>
+      <h2>Admin Panel</h2>
+      <p>Krrishna Dhwarka Foundation Bharat</p>
+    </div>
+    <div class="login-error" id="loginError"></div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="loginUser" value="admin" required autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPass" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
+    </form>
+    <p style="text-align:center;margin-top:1rem;font-size:.8rem;color:var(--muted)">
+      Default: admin / admin123 — change after first login
+    </p>
+  </div>
+</div>
+
+<!-- ══ ADMIN APP ══════════════════════════════════════════════════════════════ -->
+<div id="adminApp">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="s-logo-circle">
+          <img src="/images/logo.png" alt="Logo" onerror="this.style.display='none';this.parentElement.textContent='K'">
+        </div>
+        <div>
+          <div class="sidebar-brand-name">KDF Admin</div>
+          <div class="sidebar-brand-sub">Foundation Panel</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-link active" data-panel="dashboard"><span class="icon">📊</span> Dashboard</a>
+      <a href="#" class="nav-link" data-panel="inquiries"><span class="icon">📩</span> Inquiries <span class="badge" id="unreadBadge" style="display:none">0</span></a>
+      <a href="#" class="nav-link" data-panel="payments"><span class="icon">💰</span> Donations</a>
+      <a href="#" class="nav-link" data-panel="certificates"><span class="icon">🏆</span> Certificates</a>
+      <a href="#" class="nav-link" data-panel="banners"><span class="icon">🖼️</span> Banners</a>
+      <a href="#" class="nav-link" data-panel="settings"><span class="icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" style="color:rgba(255,255,255,.5);font-size:.8rem" target="_blank">← View Website</a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <h2 id="panelTitle">Dashboard</h2>
+      <div style="display:flex;align-items:center;gap:1rem">
+        <div class="admin-user">
+          <div class="avatar" id="userAvatar">A</div>
+          <span id="usernameLbl">Admin</span>
+        </div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- ── Dashboard ──────────────────────────────────────────────────── -->
+      <div id="panel-dashboard" class="panel active">
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-card"><div class="s-icon">💰</div><div class="s-value" id="statTotal">₹0</div><div class="s-label">Total Donations Received</div></div>
+          <div class="stat-card"><div class="s-icon">🤝</div><div class="s-value" id="statCount">0</div><div class="s-label">Successful Payments</div></div>
+          <div class="stat-card"><div class="s-icon">📩</div><div class="s-value" id="statInq">0</div><div class="s-label">Total Inquiries</div></div>
+          <div class="stat-card"><div class="s-icon">🏆</div><div class="s-value" id="statCert">0</div><div class="s-label">Certificates Uploaded</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+          <div class="card">
+            <div class="card-header"><h3>Recent Donations</h3><button class="btn btn-sm btn-outline-navy" onclick="switchPanel('payments')">View All</button></div>
+            <div class="card-body" style="padding:0">
+              <table class="data-table" id="recentDonations">
+                <thead><tr><th>Donor</th><th>Amount</th><th>Date</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Recent Inquiries</h3><button class="btn btn-sm btn-outline-navy" onclick="switchPanel('inquiries')">View All</button></div>
+            <div class="card-body" style="padding:0">
+              <table class="data-table" id="recentInquiries">
+                <thead><tr><th>Name</th><th>Subject</th><th>Date</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Inquiries ──────────────────────────────────────────────────── -->
+      <div id="panel-inquiries" class="panel">
+        <div class="card">
+          <div class="card-header">
+            <h3>All Inquiries</h3>
+            <button class="btn btn-sm btn-outline-navy" onclick="loadInquiries()">↻ Refresh</button>
+          </div>
+          <div id="inquiriesBody" style="overflow-x:auto">
+            <div class="empty-state"><div class="icon">📭</div><p>Loading…</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Payments ───────────────────────────────────────────────────── -->
+      <div id="panel-payments" class="panel">
+        <div class="card" style="margin-bottom:1.5rem">
+          <div class="card-header">
+            <h3>All Donations / Payments</h3>
+            <button class="btn btn-sm btn-outline-navy" onclick="loadDonations()">↻ Refresh</button>
+          </div>
+          <div id="paymentsBody" style="overflow-x:auto">
+            <div class="empty-state"><div class="icon">💳</div><p>Loading…</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Certificates ───────────────────────────────────────────────── -->
+      <div id="panel-certificates" class="panel">
+        <div class="upload-form">
+          <h3>📤 Upload New Certificate</h3>
+          <form id="certUploadForm">
+            <div class="upload-row">
+              <div class="f-group">
+                <label>Certificate Title *</label>
+                <input type="text" name="title" required placeholder="e.g. Registration Certificate">
+              </div>
+              <div class="f-group">
+                <label>Description</label>
+                <input type="text" name="description" placeholder="Brief description (optional)">
+              </div>
+            </div>
+            <div class="upload-row" style="margin-top:1rem">
+              <div class="f-group">
+                <label>File (JPG, PNG, PDF) *</label>
+                <input type="file" name="file" accept=".jpg,.jpeg,.png,.pdf,.webp" required>
+                <p class="upload-note">Max file size: 15 MB</p>
+              </div>
+              <div class="f-group" style="justify-content:flex-end">
+                <button type="submit" class="btn btn-gold" style="padding:.8rem 2rem">Upload Certificate</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div id="certsGrid" class="media-grid">
+          <div class="empty-state" style="grid-column:1/-1"><div class="icon">📋</div><p>Loading…</p></div>
+        </div>
+      </div>
+
+      <!-- ── Banners ────────────────────────────────────────────────────── -->
+      <div id="panel-banners" class="panel">
+        <div class="upload-form">
+          <h3>📤 Upload New Banner</h3>
+          <form id="bannerUploadForm">
+            <div class="upload-row">
+              <div class="f-group">
+                <label>Banner Title / Caption</label>
+                <input type="text" name="title" placeholder="Hero banner caption (optional)">
+              </div>
+              <div class="f-group">
+                <label>Sort Order (lower = first)</label>
+                <input type="number" name="sort_order" value="0" min="0">
+              </div>
+            </div>
+            <div class="upload-row" style="margin-top:1rem">
+              <div class="f-group">
+                <label>Image File (JPG, PNG, WebP) *</label>
+                <input type="file" name="file" accept=".jpg,.jpeg,.png,.webp" required>
+                <p class="upload-note">Recommended: 1920×800px, Max 8 MB. These will appear in the home page hero slider.</p>
+              </div>
+              <div class="f-group" style="justify-content:flex-end">
+                <button type="submit" class="btn btn-gold" style="padding:.8rem 2rem">Upload Banner</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div id="bannersGrid" class="media-grid">
+          <div class="empty-state" style="grid-column:1/-1"><div class="icon">🖼️</div><p>Loading…</p></div>
+        </div>
+      </div>
+
+      <!-- ── Settings ───────────────────────────────────────────────────── -->
+      <div id="panel-settings" class="panel">
+        <div style="max-width:480px">
+          <div class="card">
+            <div class="card-header"><h3>Change Password</h3></div>
+            <div class="card-body">
+              <div class="form-error" id="pwError" style="background:#f8d7da;color:#721c24;padding:.8rem;border-radius:6px;margin-bottom:1rem;display:none"></div>
+              <div class="form-success" id="pwSuccess" style="background:#d4edda;color:#155724;padding:.8rem;border-radius:6px;margin-bottom:1rem;display:none">Password changed successfully!</div>
+              <form id="changePassForm">
+                <div class="f-group" style="margin-bottom:1rem">
+                  <label>Current Password</label>
+                  <input type="password" name="current" required style="padding:.75rem;border:1.5px solid var(--border);border-radius:8px;width:100%;font-size:.9rem">
+                </div>
+                <div class="f-group" style="margin-bottom:1rem">
+                  <label>New Password</label>
+                  <input type="password" name="newPass" required minlength="6" style="padding:.75rem;border:1.5px solid var(--border);border-radius:8px;width:100%;font-size:.9rem">
+                </div>
+                <div class="f-group" style="margin-bottom:1.5rem">
+                  <label>Confirm New Password</label>
+                  <input type="password" name="confirmPass" required style="padding:.75rem;border:1.5px solid var(--border);border-radius:8px;width:100%;font-size:.9rem">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%">Update Password</button>
+              </form>
+            </div>
+          </div>
+          <div class="card" style="margin-top:1.5rem">
+            <div class="card-header"><h3>Quick Actions</h3></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:.8rem">
+              <a href="/" target="_blank" class="btn btn-outline-navy" style="text-align:center">🌐 View Website</a>
+              <a href="/donate.html" target="_blank" class="btn btn-outline-navy" style="text-align:center">💝 Donation Page</a>
+              <a href="/certificates.html" target="_blank" class="btn btn-outline-navy" style="text-align:center">🏆 Certificates Page</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-main -->
+</div><!-- /adminApp -->
+
+<script>
+// ─── Auth ─────────────────────────────────────────────────────────────────────
+let token = localStorage.getItem('kdf_token');
+let adminUser = localStorage.getItem('kdf_user') || 'Admin';
+
+function api(url, opts = {}) {
+  return fetch(url, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token, ...(opts.headers || {}) }
+  }).then(r => r.json());
+}
+
+function apiForm(url, formData) {
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + token },
+    body: formData
+  }).then(r => r.json());
+}
+
+function toast(msg, type = 'success') {
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+if (token) showApp();
+
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const errEl = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+  errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Logging in…';
+  try {
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: loginUser.value, password: loginPass.value })
+    }).then(r => r.json());
+    if (res.success) {
+      token = res.token;
+      adminUser = res.username;
+      localStorage.setItem('kdf_token', token);
+      localStorage.setItem('kdf_user', adminUser);
+      showApp();
+    } else {
+      errEl.textContent = res.error || 'Login failed';
+      errEl.style.display = 'block';
+    }
+  } catch {
+    errEl.textContent = 'Connection error. Is the server running?';
+    errEl.style.display = 'block';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Login';
+});
+
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminApp').style.display = 'flex';
+  document.getElementById('usernameLbl').textContent = adminUser;
+  document.getElementById('userAvatar').textContent = adminUser.charAt(0).toUpperCase();
+  loadDashboard();
+}
+
+function logout() {
+  localStorage.removeItem('kdf_token');
+  localStorage.removeItem('kdf_user');
+  token = null;
+  document.getElementById('adminApp').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginPass').value = '';
+}
+
+// ─── Navigation ──────────────────────────────────────────────────────────────
+const panelTitles = { dashboard:'Dashboard', inquiries:'Inquiries', payments:'Donations & Payments', certificates:'Certificates', banners:'Home Banners', settings:'Settings' };
+
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    switchPanel(link.dataset.panel);
+  });
+});
+
+function switchPanel(name) {
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.querySelector(`[data-panel="${name}"]`).classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('panelTitle').textContent = panelTitles[name] || name;
+  // lazy load
+  if (name === 'inquiries') loadInquiries();
+  if (name === 'payments')  loadDonations();
+  if (name === 'certificates') loadCerts();
+  if (name === 'banners') loadBanners();
+}
+
+// ─── Dashboard ────────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const stats = await api('/api/admin/stats');
+    document.getElementById('statTotal').textContent = '₹' + parseFloat(stats.totalAmount||0).toLocaleString('en-IN',{maximumFractionDigits:0});
+    document.getElementById('statCount').textContent = stats.totalDonations || 0;
+    document.getElementById('statInq').textContent   = stats.totalInquiries || 0;
+    document.getElementById('statCert').textContent  = stats.totalCerts || 0;
+    if (stats.unread > 0) {
+      const badge = document.getElementById('unreadBadge');
+      badge.textContent = stats.unread;
+      badge.style.display = 'inline';
+    }
+  } catch {}
+
+  // Recent donations
+  try {
+    const donations = await api('/api/admin/donations');
+    const recent = donations.filter(d => d.payment_status === 'completed').slice(0, 5);
+    const tbody = document.querySelector('#recentDonations tbody');
+    tbody.innerHTML = recent.length ? recent.map(d => `<tr>
+      <td>${escHtml(d.donor_name)}</td>
+      <td style="color:var(--success);font-weight:700">₹${parseFloat(d.amount).toLocaleString('en-IN')}</td>
+      <td>${fmtDate(d.created_at)}</td>
+    </tr>`).join('') : '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:2rem">No donations yet</td></tr>';
+  } catch {}
+
+  // Recent inquiries
+  try {
+    const inquiries = await api('/api/admin/inquiries');
+    const recent = inquiries.slice(0, 5);
+    const tbody = document.querySelector('#recentInquiries tbody');
+    tbody.innerHTML = recent.length ? recent.map(i => `<tr>
+      <td>${escHtml(i.name)} ${!i.is_read ? '<span class="badge-status badge-unread">NEW</span>' : ''}</td>
+      <td>${escHtml(i.subject||'General')}</td>
+      <td>${fmtDate(i.created_at)}</td>
+    </tr>`).join('') : '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:2rem">No inquiries yet</td></tr>';
+  } catch {}
+}
+
+// ─── Inquiries ────────────────────────────────────────────────────────────────
+async function loadInquiries() {
+  const body = document.getElementById('inquiriesBody');
+  body.innerHTML = '<div class="empty-state"><p>Loading…</p></div>';
+  try {
+    const data = await api('/api/admin/inquiries');
+    if (!data.length) {
+      body.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>No inquiries yet.</p></div>';
+      return;
+    }
+    body.innerHTML = `<table class="data-table">
+      <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Subject</th><th>Message</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>${data.map(i => `<tr id="inq-${i.id}">
+        <td><strong>${escHtml(i.name)}</strong></td>
+        <td><a href="mailto:${escHtml(i.email)}" style="color:var(--navy)">${escHtml(i.email)}</a></td>
+        <td>${escHtml(i.phone||'—')}</td>
+        <td>${escHtml(i.subject||'General')}</td>
+        <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtml(i.message)}">${escHtml(i.message)}</td>
+        <td>${fmtDate(i.created_at)}</td>
+        <td><span class="badge-status ${i.is_read ? 'badge-success' : 'badge-unread'}">${i.is_read ? 'Read' : 'Unread'}</span></td>
+        <td><div class="action-btns">
+          ${!i.is_read ? `<button class="btn btn-sm btn-success" onclick="markRead(${i.id})">✓ Read</button>` : ''}
+          <button class="btn btn-sm btn-danger" onclick="delInquiry(${i.id})">Delete</button>
+        </div></td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  } catch {
+    body.innerHTML = '<div class="empty-state"><p>Failed to load inquiries.</p></div>';
+  }
+}
+
+async function markRead(id) {
+  await api('/api/admin/inquiries/' + id + '/read', { method: 'PATCH' });
+  const row = document.getElementById('inq-' + id);
+  if (row) { row.querySelectorAll('td')[6].innerHTML = '<span class="badge-status badge-success">Read</span>'; row.querySelector('.btn-success')?.remove(); }
+  toast('Marked as read');
+}
+
+async function delInquiry(id) {
+  if (!confirm('Delete this inquiry?')) return;
+  await api('/api/admin/inquiries/' + id, { method: 'DELETE' });
+  document.getElementById('inq-' + id)?.remove();
+  toast('Deleted');
+}
+
+// ─── Donations ────────────────────────────────────────────────────────────────
+async function loadDonations() {
+  const body = document.getElementById('paymentsBody');
+  body.innerHTML = '<div class="empty-state"><p>Loading…</p></div>';
+  try {
+    const data = await api('/api/admin/donations');
+    if (!data.length) {
+      body.innerHTML = '<div class="empty-state"><div class="icon">💳</div><p>No donations yet.</p></div>';
+      return;
+    }
+    body.innerHTML = `<table class="data-table">
+      <thead><tr><th>Receipt ID</th><th>Donor Name</th><th>Email</th><th>Phone</th><th>Amount</th><th>Purpose</th><th>Status</th><th>Date</th><th>Receipt</th></tr></thead>
+      <tbody>${data.map(d => `<tr>
+        <td style="font-family:monospace;font-size:.8rem">${escHtml(d.receipt_id)}</td>
+        <td><strong>${escHtml(d.donor_name)}</strong></td>
+        <td>${escHtml(d.donor_email)}</td>
+        <td>${escHtml(d.donor_phone||'—')}</td>
+        <td style="font-weight:700;color:${d.payment_status==='completed'?'var(--success)':'var(--muted)'}">₹${parseFloat(d.amount).toLocaleString('en-IN')}</td>
+        <td>${escHtml(d.purpose||'General')}</td>
+        <td><span class="badge-status ${d.payment_status==='completed'?'badge-success':'badge-pending'}">${d.payment_status}</span></td>
+        <td>${fmtDate(d.created_at)}</td>
+        <td>${d.payment_status==='completed'?`<a href="/api/admin/receipt/${d.id}" class="btn btn-sm btn-gold" target="_blank">📄 PDF</a>`:'—'}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  } catch {
+    body.innerHTML = '<div class="empty-state"><p>Failed to load donations.</p></div>';
+  }
+}
+
+// ─── Certificates ─────────────────────────────────────────────────────────────
+async function loadCerts() {
+  const grid = document.getElementById('certsGrid');
+  try {
+    const data = await api('/api/admin/certificates');
+    if (!data.length) {
+      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="icon">📋</div><p>No certificates uploaded yet.</p></div>';
+      return;
+    }
+    grid.innerHTML = data.map(c => {
+      const isPDF = c.filename.toLowerCase().endsWith('.pdf');
+      const thumb = isPDF
+        ? `<div class="media-thumb"><span class="pdf-ico">📄</span></div>`
+        : `<div class="media-thumb"><img src="/uploads/certificates/${c.filename}" alt="${escHtml(c.title)}" loading="lazy"></div>`;
+      return `<div class="media-item" id="cert-${c.id}">
+        ${thumb}
+        <div class="media-info"><h4>${escHtml(c.title)}</h4><p>${escHtml(c.description||'')}</p><p style="margin-top:.3rem">${fmtDate(c.uploaded_at)}</p></div>
+        <div class="media-actions">
+          <a href="/uploads/certificates/${c.filename}" target="_blank" class="btn btn-sm btn-outline-navy">View</a>
+          <button class="btn btn-sm btn-danger" onclick="delCert(${c.id})">Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+  } catch {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><p>Failed to load certificates.</p></div>';
+  }
+}
+
+document.getElementById('certUploadForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const fd = new FormData(this);
+  const btn = this.querySelector('button[type=submit]');
+  btn.disabled = true; btn.textContent = 'Uploading…';
+  try {
+    const res = await apiForm('/api/admin/certificates', fd);
+    if (res.success) { toast('Certificate uploaded!'); this.reset(); loadCerts(); }
+    else toast(res.error || 'Upload failed', 'error');
+  } catch { toast('Upload failed', 'error'); }
+  btn.disabled = false; btn.textContent = 'Upload Certificate';
+});
+
+async function delCert(id) {
+  if (!confirm('Delete this certificate?')) return;
+  const res = await api('/api/admin/certificates/' + id, { method: 'DELETE' });
+  if (res.success) { document.getElementById('cert-' + id)?.remove(); toast('Deleted'); }
+}
+
+// ─── Banners ──────────────────────────────────────────────────────────────────
+
+async function loadBannersAdmin() {
+  const grid = document.getElementById('bannersGrid');
+  try {
+    const data = await api('/api/admin/banners');
+    renderBanners(data);
+  } catch {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><p>Failed to load banners.</p></div>';
+  }
+}
+
+function renderBanners(data) {
+  const grid = document.getElementById('bannersGrid');
+  if (!data.length) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="icon">🖼️</div><p>No banners uploaded yet.</p></div>';
+    return;
+  }
+  grid.innerHTML = data.map(b => `<div class="media-item" id="banner-${b.id}">
+    <div class="media-thumb"><img src="/uploads/banners/${b.filename}" alt="${escHtml(b.title||'Banner')}" loading="lazy"></div>
+    <div class="media-info"><h4>${escHtml(b.title||'Untitled Banner')}</h4><p>Order: ${b.sort_order}</p><p>${fmtDate(b.uploaded_at)}</p></div>
+    <div class="media-actions">
+      <button class="btn btn-sm ${b.is_active ? 'btn-outline-navy' : 'btn-success'}" onclick="toggleBanner(${b.id})">${b.is_active ? 'Deactivate' : 'Activate'}</button>
+      <button class="btn btn-sm btn-danger" onclick="delBanner(${b.id})">Delete</button>
+    </div>
+  </div>`).join('');
+}
+
+document.getElementById('bannerUploadForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const fd = new FormData(this);
+  const btn = this.querySelector('button[type=submit]');
+  btn.disabled = true; btn.textContent = 'Uploading…';
+  try {
+    const res = await apiForm('/api/admin/banners', fd);
+    if (res.success) { toast('Banner uploaded!'); this.reset(); loadBannersAdmin(); }
+    else toast(res.error || 'Upload failed', 'error');
+  } catch { toast('Upload failed', 'error'); }
+  btn.disabled = false; btn.textContent = 'Upload Banner';
+});
+
+async function toggleBanner(id) {
+  await api('/api/admin/banners/' + id + '/toggle', { method: 'PATCH' });
+  toast('Banner status updated');
+  loadBannersAdmin();
+}
+
+async function delBanner(id) {
+  if (!confirm('Delete this banner?')) return;
+  const res = await api('/api/admin/banners/' + id, { method: 'DELETE' });
+  if (res.success) { document.getElementById('banner-' + id)?.remove(); toast('Deleted'); }
+}
+
+// Override loadBanners to use admin version
+loadBanners = loadBannersAdmin;
+
+// ─── Change Password ──────────────────────────────────────────────────────────
+document.getElementById('changePassForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const errEl = document.getElementById('pwError');
+  const okEl = document.getElementById('pwSuccess');
+  errEl.style.display = okEl.style.display = 'none';
+  const data = Object.fromEntries(new FormData(this));
+  if (data.newPass !== data.confirmPass) { errEl.textContent = 'New passwords do not match'; errEl.style.display = 'block'; return; }
+  const res = await api('/api/admin/change-password', { method: 'POST', body: JSON.stringify({ current: data.current, newPass: data.newPass }) });
+  if (res.success) { okEl.style.display = 'block'; this.reset(); }
+  else { errEl.textContent = res.error || 'Failed'; errEl.style.display = 'block'; }
+});
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function fmtDate(s) { return new Date(s).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }); }
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

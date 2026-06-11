@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donate – Krrishna Dhwarka Foundation Bharat</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="/" class="nav-brand">
+      <img src="/images/logo.png" class="nav-logo" alt="KDF Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="nav-logo-placeholder" style="display:none">K</div>
+      <div class="brand-text">
+        <span class="brand-name">Krrishna Dhwarka Foundation</span>
+        <span class="brand-sub">Bharat – शिक्षा का प्रकाश</span>
+      </div>
+    </a>
+    <ul class="nav-menu">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about.html">About Us</a></li>
+      <li><a href="/certificates.html">Certificates</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+      <li><a href="/donate.html" class="nav-donate">Donate Now</a></li>
+    </ul>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container" style="position:relative;z-index:1">
+    <h1>Make a Donation</h1>
+    <div class="breadcrumb"><a href="/">Home</a> <span>/</span> Donate</div>
+    <p style="color:rgba(255,255,255,.7);margin-top:1rem;font-size:1rem">Your generosity creates opportunities. Every rupee lights up a child's future.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <!-- Success screen (hidden until payment completes) -->
+    <div id="paymentSuccess" style="display:none;max-width:640px;margin:0 auto;text-align:center;background:white;border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:3rem;border:2px solid #28a745">
+      <div style="font-size:5rem;margin-bottom:1rem">🎉</div>
+      <h2 style="color:#28a745;margin-bottom:.8rem">Thank You for Your Donation!</h2>
+      <p style="color:var(--muted);margin-bottom:.5rem">Your payment was successful. A receipt has been generated for you.</p>
+      <p style="color:var(--muted);margin-bottom:2rem">Receipt ID: <strong id="successReceiptId" style="color:var(--navy)"></strong></p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a id="downloadReceiptBtn" href="#" class="btn btn-primary btn-lg" target="_blank">📄 Download Receipt</a>
+        <a href="/" class="btn btn-outline btn-lg" style="border-color:var(--navy);color:var(--navy)">Back to Home</a>
+      </div>
+      <p style="margin-top:1.5rem;font-size:.85rem;color:var(--muted)">This receipt is eligible for 80G tax deduction. Please save it for your records.</p>
+    </div>
+
+    <!-- Donation form -->
+    <div id="donationFormWrap" class="donate-form-wrap">
+
+      <div class="form-card">
+        <h3 style="color:var(--navy);margin-bottom:.5rem">Donor Information & Payment</h3>
+        <p style="color:var(--muted);font-size:.9rem;margin-bottom:2rem">Secure payment powered by <strong>Razorpay</strong></p>
+
+        <div class="form-error" id="donateError"></div>
+
+        <form id="donateForm">
+          <!-- Amount Selection -->
+          <div class="form-group">
+            <label>Donation Amount (₹) <span class="req">*</span></label>
+            <div class="amount-grid">
+              <button type="button" class="amount-btn" data-amount="500">₹500</button>
+              <button type="button" class="amount-btn" data-amount="1000">₹1,000</button>
+              <button type="button" class="amount-btn" data-amount="2100">₹2,100</button>
+              <button type="button" class="amount-btn" data-amount="5000">₹5,000</button>
+              <button type="button" class="amount-btn" data-amount="11000">₹11,000</button>
+              <button type="button" class="amount-btn" data-amount="custom">Custom</button>
+            </div>
+            <div class="custom-amount-wrap" id="customAmountWrap" style="display:none;margin-top:.8rem">
+              <span class="rupee-prefix">₹</span>
+              <input type="number" id="customAmount" placeholder="Enter amount" min="1" step="1">
+            </div>
+            <p class="form-note">Minimum donation: ₹1. Tax benefit under 80G available for all amounts.</p>
+          </div>
+
+          <!-- Purpose -->
+          <div class="form-group">
+            <label>Donation Purpose</label>
+            <select name="purpose">
+              <option value="General Donation">General Donation</option>
+              <option value="Education Support">Education Support</option>
+              <option value="Scholarship Fund">Scholarship Fund</option>
+              <option value="Healthcare Camp">Healthcare Camp</option>
+              <option value="Women Empowerment">Women Empowerment</option>
+              <option value="Skill Development">Skill Development</option>
+              <option value="Cultural Programme">Cultural Programme</option>
+            </select>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-bottom:1.4rem;background:var(--cream)">
+            <h4 style="color:var(--navy);margin-bottom:1.2rem;font-size:1rem">Personal Details</h4>
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:0">
+                <label>Full Name <span class="req">*</span></label>
+                <input type="text" name="donor_name" required placeholder="As per PAN card">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label>Email <span class="req">*</span></label>
+                <input type="email" name="donor_email" required placeholder="For receipt delivery">
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:1.2rem">
+              <div class="form-group" style="margin-bottom:0">
+                <label>Phone Number</label>
+                <input type="tel" name="donor_phone" placeholder="+91 XXXXX XXXXX">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label>PAN Number <span style="color:var(--muted);font-weight:400">(for 80G)</span></label>
+                <input type="text" name="donor_pan" placeholder="ABCDE1234F" maxlength="10" style="text-transform:uppercase">
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:1.2rem;margin-bottom:0">
+              <label>Address <span style="color:var(--muted);font-weight:400">(for 80G certificate)</span></label>
+              <textarea name="address" rows="2" placeholder="Your full address for the tax receipt"></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="payBtn" style="width:100%;padding:1rem;font-size:1.1rem;letter-spacing:.5px">
+            🔒 Proceed to Pay Securely
+          </button>
+          <p style="text-align:center;color:var(--muted);font-size:.8rem;margin-top:.8rem">
+            Secured by Razorpay • 256-bit SSL Encryption
+          </p>
+        </form>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="donation-sidebar">
+        <h3>Why Donate?</h3>
+        <ul>
+          <li>Sponsor a child's education for a year</li>
+          <li>Fund school supplies for 10 students</li>
+          <li>Support free health camps</li>
+          <li>Empower women with vocational skills</li>
+          <li>Preserve cultural heritage programs</li>
+        </ul>
+
+        <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.15)">
+          <h4 style="color:var(--gold);margin-bottom:1rem">Your Impact</h4>
+          <div style="display:flex;flex-direction:column;gap:.8rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:rgba(255,255,255,.06);border-radius:6px">
+              <span style="color:rgba(255,255,255,.8);font-size:.85rem">₹500</span>
+              <span style="color:var(--gold);font-size:.8rem">Books for 2 students</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:rgba(255,255,255,.06);border-radius:6px">
+              <span style="color:rgba(255,255,255,.8);font-size:.85rem">₹2,100</span>
+              <span style="color:var(--gold);font-size:.8rem">1 month scholarship</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:rgba(255,255,255,.06);border-radius:6px">
+              <span style="color:rgba(255,255,255,.8);font-size:.85rem">₹5,000</span>
+              <span style="color:var(--gold);font-size:.8rem">Health camp support</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:rgba(255,255,255,.06);border-radius:6px">
+              <span style="color:rgba(255,255,255,.8);font-size:.85rem">₹11,000</span>
+              <span style="color:var(--gold);font-size:.8rem">Full year scholarship</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:2rem;padding:1.2rem;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:8px">
+          <p style="color:var(--gold);font-weight:700;font-size:.85rem;margin:0">📋 80G Tax Benefit</p>
+          <p style="color:rgba(255,255,255,.65);font-size:.8rem;margin:.4rem 0 0">Get tax deduction under Sec 80G. Receipt generated instantly after payment.</p>
+        </div>
+
+        <div style="margin-top:1.5rem;padding:1.2rem;background:rgba(255,255,255,.06);border-radius:8px;text-align:center">
+          <p style="color:rgba(255,255,255,.6);font-size:.8rem;margin:0">🔒 100% Secure &amp; Encrypted</p>
+          <p style="color:rgba(255,255,255,.6);font-size:.75rem;margin:.3rem 0 0">All transactions secured by Razorpay</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-brand" style="margin-bottom:1.2rem">
+          <img src="/images/logo.png" class="nav-logo" alt="Logo" onerror="this.style.display='none'">
+          <div class="brand-text"><span class="brand-name">Krrishna Dhwarka Foundation</span><span class="brand-sub">Bharat</span></div>
+        </div>
+        <p>शिक्षा का प्रकाश – Illuminating lives through education and service.</p>
+      </div>
+      <div class="footer-col"><h4>Navigate</h4><ul>
+        <li><a href="/">Home</a></li><li><a href="/about.html">About</a></li>
+        <li><a href="/certificates.html">Certificates</a></li><li><a href="/contact.html">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul>
+        <li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Refund Policy</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Contact</h4>
+        <div class="contact-item">📧 info@krrishnadhwarkafoundation.org</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
+      <span>© 2024 Krrishna Dhwarka Foundation Bharat. All rights reserved.</span>
+      <span>80G Registered | Powered by Razorpay</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+let selectedAmount = null;
+
+// Amount button selection
+document.querySelectorAll('.amount-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+    this.classList.add('selected');
+    const val = this.dataset.amount;
+    const customWrap = document.getElementById('customAmountWrap');
+    if (val === 'custom') {
+      customWrap.style.display = 'flex';
+      selectedAmount = null;
+      document.getElementById('customAmount').focus();
+    } else {
+      customWrap.style.display = 'none';
+      selectedAmount = parseFloat(val);
+    }
+  });
+});
+
+document.getElementById('customAmount').addEventListener('input', function() {
+  selectedAmount = parseFloat(this.value) || null;
+});
+
+document.getElementById('donateForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const errEl = document.getElementById('donateError');
+  errEl.style.display = 'none';
+
+  const customInput = document.getElementById('customAmount');
+  if (!selectedAmount && customInput.style.display !== 'none') {
+    selectedAmount = parseFloat(customInput.value);
+  }
+
+  if (!selectedAmount || selectedAmount < 1) {
+    errEl.textContent = 'Please select or enter a valid donation amount.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const data = {
+    amount: selectedAmount,
+    ...Object.fromEntries(new FormData(this))
+  };
+
+  const btn = document.getElementById('payBtn');
+  btn.disabled = true;
+  btn.textContent = 'Creating order…';
+
+  try {
+    const res = await fetch('/api/donation/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const order = await res.json();
+    if (!order.success) throw new Error(order.error || 'Order creation failed');
+
+    const options = {
+      key: order.key_id,
+      amount: Math.round(selectedAmount * 100),
+      currency: 'INR',
+      name: 'Krrishna Dhwarka Foundation Bharat',
+      description: data.purpose || 'Donation',
+      image: '/images/logo.png',
+      order_id: order.order_id,
+      handler: async function(response) {
+        try {
+          const verifyRes = await fetch('/api/donation/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            })
+          });
+          const verifyData = await verifyRes.json();
+          if (verifyData.success) {
+            document.getElementById('donationFormWrap').style.display = 'none';
+            const successDiv = document.getElementById('paymentSuccess');
+            successDiv.style.display = 'block';
+            document.getElementById('successReceiptId').textContent = verifyData.receipt_id;
+            document.getElementById('downloadReceiptBtn').href = '/api/receipt/' + verifyData.receipt_id;
+            successDiv.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            errEl.textContent = 'Payment received but verification failed. Please contact us with your payment ID: ' + response.razorpay_payment_id;
+            errEl.style.display = 'block';
+          }
+        } catch {
+          errEl.textContent = 'An error occurred during verification. Please contact support.';
+          errEl.style.display = 'block';
+        }
+        btn.disabled = false;
+        btn.textContent = '🔒 Proceed to Pay Securely';
+      },
+      prefill: {
+        name: data.donor_name,
+        email: data.donor_email,
+        contact: data.donor_phone
+      },
+      theme: { color: '#1a1f4e' },
+      modal: {
+        ondismiss: function() {
+          btn.disabled = false;
+          btn.textContent = '🔒 Proceed to Pay Securely';
+        }
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', function(response) {
+      errEl.textContent = 'Payment failed: ' + (response.error.description || 'Unknown error');
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = '🔒 Proceed to Pay Securely';
+    });
+    rzp.open();
+
+  } catch (err) {
+    errEl.textContent = err.message || 'Failed to initiate payment. Please try again.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = '🔒 Proceed to Pay Securely';
+  }
+});
+</script>
+</body>
+</html>
