@@ -286,6 +286,58 @@ async function loadCertificates() {
   }
 }
 
+// ── Scroll reveal animations ────────────────────────────────────────────────────
+function initReveal() {
+  const targets = document.querySelectorAll(
+    '.section-header, .program-card, .mv-card, .cert-card, .team-card, .value-item, ' +
+    '.about-content, .about-image-wrapper, .stat-item, .contact-info, .form-card, .donation-sidebar'
+  );
+  if (!targets.length) return;
+  if (!('IntersectionObserver' in window)) return; // graceful: elements stay visible (no .reveal)
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  targets.forEach(el => {
+    el.classList.add('reveal');
+    const idx = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
+    el.style.transitionDelay = Math.min(idx, 5) * 70 + 'ms';
+    io.observe(el);
+  });
+}
+
+// ── Animated number counters ─────────────────────────────────────────────────────
+function initCounters() {
+  const nums = document.querySelectorAll('.stat-number');
+  if (!nums.length || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      animateCount(e.target);
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.5 });
+  nums.forEach(n => io.observe(n));
+}
+
+function animateCount(el) {
+  const m = el.textContent.trim().match(/^([^\d]*)([\d,]+)(.*)$/);
+  if (!m) return;
+  const prefix = m[1], suffix = m[3];
+  const target = parseInt(m[2].replace(/,/g, ''), 10);
+  if (isNaN(target)) return;
+  const dur = 1400, start = performance.now();
+  (function tick(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = prefix + Math.round(target * eased).toLocaleString('en-IN') + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  })(start);
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 // Build shared header/footer immediately (script runs at end of <body>, mounts exist)
 buildHeader();
@@ -294,4 +346,6 @@ buildFooter();
 document.addEventListener('DOMContentLoaded', () => {
   initSlider();
   loadCertificates();
+  initReveal();
+  initCounters();
 });
