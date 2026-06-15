@@ -340,9 +340,9 @@ async function initWhoSlider() {
   // Fall back to donation-themed stock images until the admin uploads their own
   if (!images.length) {
     images = [
-      { src: 'https://loremflickr.com/800/600/children,education,india?lock=21', title: 'Education for every child' },
-      { src: 'https://loremflickr.com/800/600/charity,volunteer,community?lock=22', title: 'Serving with compassion' },
-      { src: 'https://loremflickr.com/800/600/donation,help,hands?lock=23', title: 'Your support changes lives' },
+      { src: 'https://images.pexels.com/photos/15119089/pexels-photo-15119089.jpeg?auto=compress&cs=tinysrgb&w=800', title: 'Education for every child' },
+      { src: 'https://images.pexels.com/photos/6646926/pexels-photo-6646926.jpeg?auto=compress&cs=tinysrgb&w=800', title: 'Serving communities with compassion' },
+      { src: 'https://images.pexels.com/photos/33034061/pexels-photo-33034061.jpeg?auto=compress&cs=tinysrgb&w=800', title: 'Health & care for all' },
     ];
   }
 
