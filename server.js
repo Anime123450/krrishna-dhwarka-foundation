@@ -62,6 +62,15 @@ db.exec(`
     uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 
+  CREATE TABLE IF NOT EXISTS gallery (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT DEFAULT '',
+    filename TEXT NOT NULL,
+    is_active INTEGER DEFAULT 1,
+    sort_order INTEGER DEFAULT 0,
+    uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
   CREATE TABLE IF NOT EXISTS admins (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
@@ -80,7 +89,7 @@ if (adminCount.c === 0) {
 }
 
 // ─── Upload directories ───────────────────────────────────────────────────────
-['certificates', 'banners'].forEach(d => {
+['certificates', 'banners', 'gallery'].forEach(d => {
   const dir = path.join(__dirname, 'public', 'uploads', d);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 });
@@ -112,6 +121,12 @@ const uploadCert = multer({
 
 const uploadBanner = multer({
   storage: makeStorage('banners'),
+  fileFilter: (req, file, cb) => cb(null, /\.(jpe?g|png|webp)$/i.test(file.originalname)),
+  limits: { fileSize: 8 * 1024 * 1024 }
+});
+
+const uploadGallery = multer({
+  storage: makeStorage('gallery'),
   fileFilter: (req, file, cb) => cb(null, /\.(jpe?g|png|webp)$/i.test(file.originalname)),
   limits: { fileSize: 8 * 1024 * 1024 }
 });
@@ -211,6 +226,16 @@ app.get('/api/certificates', (req, res) => {
   res.json(db.prepare('SELECT * FROM certificates ORDER BY uploaded_at DESC').all());
 });
 
+// Public gallery (Who We Are auto-slider)
+app.get('/api/gallery', (req, res) => {
+  res.json(db.prepare('SELECT * FROM gallery WHERE is_active=1 ORDER BY sort_order ASC, uploaded_at DESC').all());
+});
+
+// Admin: all gallery images (active + inactive)
+app.get('/api/admin/gallery', auth, (req, res) => {
+  res.json(db.prepare('SELECT * FROM gallery ORDER BY sort_order ASC, uploaded_at DESC').all());
+});
+
 // ═══════════════════════════════════════════════════════════════════════════════
 //  ADMIN API
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -289,6 +314,27 @@ app.delete('/api/admin/banners/:id', auth, (req, res) => {
   if (b) {
     try { fs.unlinkSync(path.join(__dirname, 'public', 'uploads', 'banners', b.filename)); } catch {}
     db.prepare('DELETE FROM banners WHERE id=?').run(req.params.id);
+  }
+  res.json({ success: true });
+});
+
+// Gallery (Who We Are images)
+app.post('/api/admin/gallery', auth, uploadGallery.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'Image file required' });
+  db.prepare('INSERT INTO gallery (title,filename,sort_order) VALUES (?,?,?)').run(req.body.title||'', req.file.filename, parseInt(req.body.sort_order)||0);
+  res.json({ success: true });
+});
+app.patch('/api/admin/gallery/:id/toggle', auth, (req, res) => {
+  const g = db.prepare('SELECT * FROM gallery WHERE id=?').get(req.params.id);
+  if (!g) return res.status(404).json({ error: 'Not found' });
+  db.prepare('UPDATE gallery SET is_active=? WHERE id=?').run(g.is_active ? 0 : 1, req.params.id);
+  res.json({ success: true });
+});
+app.delete('/api/admin/gallery/:id', auth, (req, res) => {
+  const g = db.prepare('SELECT * FROM gallery WHERE id=?').get(req.params.id);
+  if (g) {
+    try { fs.unlinkSync(path.join(__dirname, 'public', 'uploads', 'gallery', g.filename)); } catch {}
+    db.prepare('DELETE FROM gallery WHERE id=?').run(req.params.id);
   }
   res.json({ success: true });
 });

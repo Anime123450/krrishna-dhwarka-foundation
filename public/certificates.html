@@ -26,7 +26,7 @@
       <div class="loading"><div class="spinner"></div> Loading certificates…</div>
     </div>
     <div id="noCerts" style="display:none;text-align:center;padding:4rem 0">
-      <div style="font-size:3rem;margin-bottom:1rem">📋</div>
+      <div class="ico" data-ico="clipboard" style="font-size:3rem;color:var(--gold-dark);margin:0 auto 1rem;width:3rem"></div>
       <h3 style="color:var(--navy)">No Certificates Yet</h3>
       <p style="color:var(--muted)">Certificates and recognitions will appear here once uploaded by the admin.</p>
     </div>
@@ -34,27 +34,27 @@
 </section>
 
 <!-- Trust section -->
-<section style="background:var(--navy)">
+<section style="background:var(--soft)">
   <div class="container">
     <div style="text-align:center;max-width:700px;margin:0 auto">
-      <h2 style="color:var(--gold-pale)">Why Trust Us?</h2>
-      <div style="width:60px;height:4px;background:var(--gold);margin:1rem auto 2rem;border-radius:2px"></div>
-      <p style="color:rgba(255,255,255,.75)">Krrishna Dhwarka Foundation Bharat operates with the highest standards of transparency and accountability. All donations are used solely for the stated charitable purposes.</p>
+      <h2 style="color:var(--navy)">Why Trust Us?</h2>
+      <div style="width:60px;height:4px;background:var(--grad-gold);margin:1rem auto 2rem;border-radius:2px"></div>
+      <p style="color:var(--muted)">Krrishna Dhwarka Foundation Bharat operates with the highest standards of transparency and accountability. All donations are used solely for the stated charitable purposes.</p>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem">
-        <div style="text-align:center;padding:1.5rem;background:rgba(255,255,255,.06);border:1px solid rgba(201,168,76,.2);border-radius:var(--radius)">
-          <div style="font-size:2rem;margin-bottom:.8rem">⚖️</div>
-          <h4 style="color:var(--gold);margin-bottom:.5rem">Legally Registered</h4>
-          <p style="color:rgba(255,255,255,.65);font-size:.85rem">Registered under applicable laws with all statutory compliances in place.</p>
+        <div style="text-align:center;padding:2rem 1.5rem;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)">
+          <div class="mv-icon ico" data-ico="scale" style="margin:0 auto 1rem"></div>
+          <h4 style="color:var(--navy);margin-bottom:.5rem">Legally Registered</h4>
+          <p style="color:var(--muted);font-size:.88rem">Registered under applicable laws with all statutory compliances in place.</p>
         </div>
-        <div style="text-align:center;padding:1.5rem;background:rgba(255,255,255,.06);border:1px solid rgba(201,168,76,.2);border-radius:var(--radius)">
-          <div style="font-size:2rem;margin-bottom:.8rem">💰</div>
-          <h4 style="color:var(--gold);margin-bottom:.5rem">80G Benefits</h4>
-          <p style="color:rgba(255,255,255,.65);font-size:.85rem">Donors can claim tax exemption under Section 80G of the Income Tax Act.</p>
+        <div style="text-align:center;padding:2rem 1.5rem;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)">
+          <div class="mv-icon ico" data-ico="wallet" style="margin:0 auto 1rem"></div>
+          <h4 style="color:var(--navy);margin-bottom:.5rem">80G Benefits</h4>
+          <p style="color:var(--muted);font-size:.88rem">Donors can claim tax exemption under Section 80G of the Income Tax Act.</p>
         </div>
-        <div style="text-align:center;padding:1.5rem;background:rgba(255,255,255,.06);border:1px solid rgba(201,168,76,.2);border-radius:var(--radius)">
-          <div style="font-size:2rem;margin-bottom:.8rem">📊</div>
-          <h4 style="color:var(--gold);margin-bottom:.5rem">Transparent</h4>
-          <p style="color:rgba(255,255,255,.65);font-size:.85rem">Annual reports and financial statements are available to stakeholders.</p>
+        <div style="text-align:center;padding:2rem 1.5rem;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)">
+          <div class="mv-icon ico" data-ico="chart" style="margin:0 auto 1rem"></div>
+          <h4 style="color:var(--navy);margin-bottom:.5rem">Transparent</h4>
+          <p style="color:var(--muted);font-size:.88rem">Annual reports and financial statements are available to stakeholders.</p>
         </div>
       </div>
     </div>
@@ -79,7 +79,7 @@ async function loadAllCertificates() {
     grid.innerHTML = certs.map(c => {
       const isPDF = c.filename.toLowerCase().endsWith('.pdf');
       const thumb = isPDF
-        ? `<div class="cert-thumb"><span class="pdf-icon">📄</span></div>`
+        ? `<div class="cert-thumb"><span class="pdf-icon ico" data-ico="file"></span></div>`
         : `<div class="cert-thumb"><img src="/uploads/certificates/${c.filename}" alt="${c.title}" loading="lazy"></div>`;
       const link = isPDF
         ? `<a href="/uploads/certificates/${c.filename}" target="_blank" class="btn btn-sm btn-navy">View PDF</a>`
@@ -94,6 +94,7 @@ async function loadAllCertificates() {
         </div>
       </div>`;
     }).join('');
+    if (window.renderIcons) renderIcons(grid);
   } catch {
     grid.innerHTML = '<p style="text-align:center;color:var(--muted);grid-column:1/-1">Unable to load certificates.</p>';
   }

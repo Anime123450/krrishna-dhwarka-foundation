@@ -23,12 +23,12 @@
 
     <!-- Success screen (hidden until payment completes) -->
     <div id="paymentSuccess" style="display:none;max-width:640px;margin:0 auto;text-align:center;background:white;border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:3rem;border:2px solid #28a745">
-      <div style="font-size:5rem;margin-bottom:1rem">🎉</div>
+      <div class="ico" data-ico="check" style="font-size:84px;color:#28a745;margin:0 auto 1rem"></div>
       <h2 style="color:#28a745;margin-bottom:.8rem">Thank You for Your Donation!</h2>
       <p style="color:var(--muted);margin-bottom:.5rem">Your payment was successful. A receipt has been generated for you.</p>
       <p style="color:var(--muted);margin-bottom:2rem">Receipt ID: <strong id="successReceiptId" style="color:var(--navy)"></strong></p>
       <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-        <a id="downloadReceiptBtn" href="#" class="btn btn-primary btn-lg" target="_blank">📄 Download Receipt</a>
+        <a id="downloadReceiptBtn" href="#" class="btn btn-primary btn-lg" target="_blank"><span class="ico" data-ico="file"></span> Download Receipt</a>
         <a href="/" class="btn btn-outline btn-lg" style="border-color:var(--navy);color:var(--navy)">Back to Home</a>
       </div>
       <p style="margin-top:1.5rem;font-size:.85rem;color:var(--muted)">This receipt is eligible for 80G tax deduction. Please save it for your records.</p>
@@ -106,7 +106,7 @@
           </div>
 
           <button type="submit" class="btn btn-primary" id="payBtn" style="width:100%;padding:1rem;font-size:1.1rem;letter-spacing:.5px">
-            🔒 Proceed to Pay Securely
+            <span class="ico" data-ico="lock"></span> Proceed to Pay Securely
           </button>
           <p style="text-align:center;color:var(--muted);font-size:.8rem;margin-top:.8rem">
             Secured by Razorpay • 256-bit SSL Encryption
@@ -125,36 +125,36 @@
           <li>Preserve cultural heritage programs</li>
         </ul>
 
-        <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.15)">
-          <h4 style="color:var(--gold);margin-bottom:1rem">Your Impact</h4>
+        <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+          <h4 style="color:var(--gold-dark);margin-bottom:1rem">Your Impact</h4>
           <div style="display:flex;flex-direction:column;gap:.8rem">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:rgba(255,255,255,.06);border-radius:6px">
-              <span style="color:rgba(255,255,255,.8);font-size:.85rem">₹500</span>
-              <span style="color:var(--gold);font-size:.8rem">Books for 2 students</span>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:var(--white);border:1px solid var(--border);border-radius:10px">
+              <span style="color:var(--navy);font-weight:700;font-size:.9rem">₹500</span>
+              <span style="color:var(--gold-dark);font-size:.82rem">Books for 2 students</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:rgba(255,255,255,.06);border-radius:6px">
-              <span style="color:rgba(255,255,255,.8);font-size:.85rem">₹2,100</span>
-              <span style="color:var(--gold);font-size:.8rem">1 month scholarship</span>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:var(--white);border:1px solid var(--border);border-radius:10px">
+              <span style="color:var(--navy);font-weight:700;font-size:.9rem">₹2,100</span>
+              <span style="color:var(--gold-dark);font-size:.82rem">1 month scholarship</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:rgba(255,255,255,.06);border-radius:6px">
-              <span style="color:rgba(255,255,255,.8);font-size:.85rem">₹5,000</span>
-              <span style="color:var(--gold);font-size:.8rem">Health camp support</span>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:var(--white);border:1px solid var(--border);border-radius:10px">
+              <span style="color:var(--navy);font-weight:700;font-size:.9rem">₹5,000</span>
+              <span style="color:var(--gold-dark);font-size:.82rem">Health camp support</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:rgba(255,255,255,.06);border-radius:6px">
-              <span style="color:rgba(255,255,255,.8);font-size:.85rem">₹11,000</span>
-              <span style="color:var(--gold);font-size:.8rem">Full year scholarship</span>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem;background:var(--white);border:1px solid var(--border);border-radius:10px">
+              <span style="color:var(--navy);font-weight:700;font-size:.9rem">₹11,000</span>
+              <span style="color:var(--gold-dark);font-size:.82rem">Full year scholarship</span>
             </div>
           </div>
         </div>
 
-        <div style="margin-top:2rem;padding:1.2rem;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:8px">
-          <p style="color:var(--gold);font-weight:700;font-size:.85rem;margin:0">📋 80G Tax Benefit</p>
-          <p style="color:rgba(255,255,255,.65);font-size:.8rem;margin:.4rem 0 0">Get tax deduction under Sec 80G. Receipt generated instantly after payment.</p>
+        <div style="margin-top:2rem;padding:1.2rem;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.35);border-radius:14px">
+          <p style="color:var(--gold-dark);font-weight:700;font-size:.9rem;margin:0;display:flex;align-items:center;gap:.5rem"><span class="ico" data-ico="wallet"></span> 80G Tax Benefit</p>
+          <p style="color:var(--muted);font-size:.8rem;margin:.4rem 0 0">Get tax deduction under Sec 80G. Receipt generated instantly after payment.</p>
         </div>
 
-        <div style="margin-top:1.5rem;padding:1.2rem;background:rgba(255,255,255,.06);border-radius:8px;text-align:center">
-          <p style="color:rgba(255,255,255,.6);font-size:.8rem;margin:0">🔒 100% Secure &amp; Encrypted</p>
-          <p style="color:rgba(255,255,255,.6);font-size:.75rem;margin:.3rem 0 0">All transactions secured by Razorpay</p>
+        <div style="margin-top:1.5rem;padding:1.2rem;background:var(--white);border:1px solid var(--border);border-radius:14px;text-align:center">
+          <p style="color:var(--navy);font-weight:600;font-size:.85rem;margin:0;display:flex;align-items:center;justify-content:center;gap:.5rem"><span class="ico" data-ico="lock"></span> 100% Secure &amp; Encrypted</p>
+          <p style="color:var(--muted);font-size:.78rem;margin:.3rem 0 0">All transactions secured by Razorpay</p>
         </div>
       </div>
 
@@ -260,7 +260,7 @@ document.getElementById('donateForm').addEventListener('submit', async function(
           errEl.style.display = 'block';
         }
         btn.disabled = false;
-        btn.textContent = '🔒 Proceed to Pay Securely';
+        btn.innerHTML = '<span class="ico" data-ico="lock"></span> Proceed to Pay Securely'; if (window.renderIcons) renderIcons(btn);
       },
       prefill: {
         name: data.donor_name,
@@ -271,7 +271,7 @@ document.getElementById('donateForm').addEventListener('submit', async function(
       modal: {
         ondismiss: function() {
           btn.disabled = false;
-          btn.textContent = '🔒 Proceed to Pay Securely';
+          btn.innerHTML = '<span class="ico" data-ico="lock"></span> Proceed to Pay Securely'; if (window.renderIcons) renderIcons(btn);
         }
       }
     };
@@ -281,7 +281,8 @@ document.getElementById('donateForm').addEventListener('submit', async function(
       errEl.textContent = 'Payment failed: ' + (response.error.description || 'Unknown error');
       errEl.style.display = 'block';
       btn.disabled = false;
-      btn.textContent = '🔒 Proceed to Pay Securely';
+      btn.innerHTML = '<span class="ico" data-ico="lock"></span> Proceed to Pay Securely';
+      if (window.renderIcons) renderIcons(btn);
     });
     rzp.open();
 
@@ -289,7 +290,7 @@ document.getElementById('donateForm').addEventListener('submit', async function(
     errEl.textContent = err.message || 'Failed to initiate payment. Please try again.';
     errEl.style.display = 'block';
     btn.disabled = false;
-    btn.textContent = '🔒 Proceed to Pay Securely';
+    btn.innerHTML = '<span class="ico" data-ico="lock"></span> Proceed to Pay Securely'; if (window.renderIcons) renderIcons(btn);
   }
 });
 </script>
