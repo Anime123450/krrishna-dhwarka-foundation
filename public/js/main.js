@@ -31,6 +31,43 @@ function socialLinks(cls) {
   ).join('');
 }
 
+// ── Line-style SVG icon set (replaces emoji site-wide) ──────────────────────────
+const ICONS = {
+  phone:   '<svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>',
+  mail:    '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+  location:'<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  globe:   '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/></svg>',
+  clipboard:'<svg viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg>',
+  calendar:'<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></svg>',
+  heart:   '<svg viewBox="0 0 24 24"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21l8.8-8.3a5 5 0 0 0 0-7.1z"/></svg>',
+  target:  '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/></svg>',
+  eye:     '<svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+  book:    '<svg viewBox="0 0 24 24"><path d="M3 4.5A1.5 1.5 0 0 1 4.5 3H11v17H4.5A1.5 1.5 0 0 0 3 21.5z"/><path d="M21 4.5A1.5 1.5 0 0 0 19.5 3H13v17h6.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg>',
+  briefcase:'<svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg>',
+  leaf:    '<svg viewBox="0 0 24 24"><path d="M4 20s.5-9 8-13c0 0 5-2 8-2 0 3-1 8-3 11-3.5 5-13 4-13 4z"/><path d="M9 15c2-2 4-3 6-4"/></svg>',
+  award:   '<svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="m9 14-2 7 5-3 5 3-2-7"/></svg>',
+  palette: '<svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 2-2 0-1.5 1-2 2-2h2a3 3 0 0 0 3-3 8 8 0 0 0-9-9z"/><circle cx="7.5" cy="11" r="1"/><circle cx="11" cy="7.5" r="1"/><circle cx="15.5" cy="9" r="1"/></svg>',
+  heartbeat:'<svg viewBox="0 0 24 24"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21l8.8-8.3a5 5 0 0 0 0-7.1z"/><path d="M3.7 12.5H8l1.5-3 2 5 1.4-2.5h4"/></svg>',
+  laptop:  '<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1"/><path d="M2 20h20"/></svg>',
+  users:   '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20a6 6 0 0 1 12 0M16 5a3.5 3.5 0 0 1 0 7M21 20a6 6 0 0 0-4-5.6"/></svg>',
+  shield:  '<svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
+  scale:   '<svg viewBox="0 0 24 24"><path d="M12 3v18M6 21h12M7 6h10"/><path d="M7 6 4 12h6zM17 6l-3 6h6z"/></svg>',
+  wallet:  '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 14h2"/></svg>',
+  chart:   '<svg viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-7"/></svg>',
+  file:    '<svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>',
+  lock:    '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  check:   '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 5-5"/></svg>',
+  building:'<svg viewBox="0 0 24 24"><path d="M4 21V8l8-5 8 5v13"/><path d="M4 21h16M9 21v-5h6v5"/><path d="M9 11h.01M15 11h.01M9 14h.01M15 14h.01"/></svg>',
+  sparkle: '<svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>',
+};
+
+function renderIcons(root = document) {
+  root.querySelectorAll('.ico[data-ico]:not([data-done])').forEach(el => {
+    const svg = ICONS[el.dataset.ico];
+    if (svg) { el.innerHTML = svg; el.setAttribute('data-done', '1'); }
+  });
+}
+
 // ── Build shared header ────────────────────────────────────────────────────────
 function buildHeader() {
   const mount = document.getElementById('site-header');
@@ -40,11 +77,11 @@ function buildHeader() {
     <div class="top-bar">
       <div class="container">
         <div class="top-bar-info">
-          <a href="tel:${FOUNDATION.phoneRaw}"><span class="tb-ico">📞</span> ${FOUNDATION.phone}</a>
-          <a href="mailto:${FOUNDATION.email}"><span class="tb-ico">✉️</span> ${FOUNDATION.email}</a>
+          <a href="tel:${FOUNDATION.phoneRaw}"><span class="tb-ico ico" data-ico="phone"></span> ${FOUNDATION.phone}</a>
+          <a href="mailto:${FOUNDATION.email}"><span class="tb-ico ico" data-ico="mail"></span> ${FOUNDATION.email}</a>
         </div>
         <div class="top-bar-extra">
-          <span class="tb-badge">🪔 शिक्षा का प्रकाश — Light of Education</span>
+          <span class="tb-badge">शिक्षा का प्रकाश — Light of Education</span>
           <div class="top-social">${socialLinks('')}</div>
         </div>
       </div>
@@ -64,7 +101,7 @@ function buildHeader() {
           <li><a href="/about.html">About Us</a></li>
           <li><a href="/certificates.html">Certificates</a></li>
           <li><a href="/contact.html">Contact</a></li>
-          <li><a href="/donate.html" class="nav-donate">❤ Donate Now</a></li>
+          <li><a href="/donate.html" class="nav-donate"><span class="ico" data-ico="heart"></span> Donate Now</a></li>
         </ul>
         <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
       </div>
@@ -147,10 +184,10 @@ function buildFooter() {
         </div>
         <div class="footer-col">
           <h4>Get In Touch</h4>
-          <div class="contact-item"><span class="ci-icon">📍</span><span>${FOUNDATION.address}</span></div>
-          <div class="contact-item"><span class="ci-icon">📧</span><a href="mailto:${FOUNDATION.email}" style="color:inherit">${FOUNDATION.email}</a></div>
-          <div class="contact-item"><span class="ci-icon">📞</span><a href="tel:${FOUNDATION.phoneRaw}" style="color:inherit">${FOUNDATION.phone}</a></div>
-          <a href="/donate.html" class="btn btn-primary btn-sm" style="margin-top:.5rem">❤ Donate Now</a>
+          <div class="contact-item"><span class="ci-icon ico" data-ico="location"></span><span>${FOUNDATION.address}</span></div>
+          <div class="contact-item"><span class="ci-icon ico" data-ico="mail"></span><a href="mailto:${FOUNDATION.email}" style="color:inherit">${FOUNDATION.email}</a></div>
+          <div class="contact-item"><span class="ci-icon ico" data-ico="phone"></span><a href="tel:${FOUNDATION.phoneRaw}" style="color:inherit">${FOUNDATION.phone}</a></div>
+          <a href="/donate.html" class="btn btn-primary btn-sm" style="margin-top:.5rem"><span class="ico" data-ico="heart"></span> Donate Now</a>
         </div>
       </div>
     </div>
@@ -168,7 +205,7 @@ function buildFooter() {
   if (nf) nf.addEventListener('submit', e => {
     e.preventDefault();
     nf.reset();
-    toast('Thank you for subscribing! 🙏', 'success');
+    toast('Thank you for subscribing!', 'success');
   });
 
   // Back to top
@@ -222,6 +259,9 @@ async function initSlider() {
 
   buildIndicators(slides.length);
   startAutoplay(slider);
+  addSwipe(slider,
+    () => { goToSlide(slideIndex + 1); startAutoplay(slider); },
+    () => { goToSlide(slideIndex - 1); startAutoplay(slider); });
 }
 
 function buildIndicators(count) {
@@ -266,7 +306,7 @@ async function loadCertificates() {
     grid.innerHTML = certs.map(c => {
       const isPDF = c.filename.toLowerCase().endsWith('.pdf');
       const thumb = isPDF
-        ? `<div class="cert-thumb"><span class="pdf-icon">📄</span></div>`
+        ? `<div class="cert-thumb"><span class="pdf-icon ico" data-ico="file"></span></div>`
         : `<div class="cert-thumb"><img src="/uploads/certificates/${c.filename}" alt="${c.title}" loading="lazy"></div>`;
       const link = isPDF
         ? `<a href="/uploads/certificates/${c.filename}" target="_blank" class="btn btn-sm btn-navy" style="margin-top:.8rem">View PDF</a>`
@@ -281,9 +321,68 @@ async function loadCertificates() {
         </div>
       </div>`;
     }).join('');
+    renderIcons(grid);
   } catch {
     grid.innerHTML = '<p style="text-align:center;color:var(--muted)">Unable to load certificates.</p>';
   }
+}
+
+// ── "Who We Are" auto-sliding gallery (admin managed) ──────────────────────────
+async function initWhoSlider() {
+  const wrap = document.getElementById('whoSlider');
+  if (!wrap) return;
+  let images = [];
+  try {
+    const res = await fetch('/api/gallery');
+    images = await res.json();
+  } catch {}
+
+  // No images uploaded yet → keep the fallback logo that's already in the HTML
+  if (!images.length) return;
+
+  const fallback = document.getElementById('whoFallback');
+  if (fallback) fallback.remove();
+
+  wrap.innerHTML = images.map((g, i) => `
+    <div class="who-slide${i === 0 ? ' active' : ''}">
+      <img src="/uploads/gallery/${g.filename}" alt="${(g.title || 'Our work').replace(/"/g, '')}" loading="lazy">
+      ${g.title ? `<div class="who-cap">${escapeHTML(g.title)}</div>` : ''}
+    </div>`).join('') +
+    (images.length > 1
+      ? `<div class="who-dots">${images.map((_, i) => `<button class="${i === 0 ? 'active' : ''}" aria-label="Slide ${i+1}"></button>`).join('')}</div>`
+      : '');
+
+  if (images.length < 2) return;
+
+  const slides = wrap.querySelectorAll('.who-slide');
+  const dots = wrap.querySelectorAll('.who-dots button');
+  let idx = 0, timer;
+
+  function go(n) {
+    slides[idx].classList.remove('active'); dots[idx].classList.remove('active');
+    idx = (n + slides.length) % slides.length;
+    slides[idx].classList.add('active'); dots[idx].classList.add('active');
+  }
+  function play() { clearInterval(timer); timer = setInterval(() => go(idx + 1), 4000); }
+  dots.forEach((d, i) => d.addEventListener('click', () => { go(i); play(); }));
+  addSwipe(wrap, () => { go(idx + 1); play(); }, () => { go(idx - 1); play(); });
+  play();
+}
+
+function escapeHTML(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Lightweight touch-swipe helper (better mobile interaction)
+function addSwipe(el, onLeft, onRight) {
+  let x0 = null;
+  el.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  el.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 45) (dx < 0 ? onLeft : onRight)();
+    x0 = null;
+  }, { passive: true });
 }
 
 // ── Scroll reveal animations ────────────────────────────────────────────────────
@@ -342,9 +441,12 @@ function animateCount(el) {
 // Build shared header/footer immediately (script runs at end of <body>, mounts exist)
 buildHeader();
 buildFooter();
+renderIcons();
 
 document.addEventListener('DOMContentLoaded', () => {
+  renderIcons();          // fill any static page icons
   initSlider();
+  initWhoSlider();
   loadCertificates();
   initReveal();
   initCounters();
