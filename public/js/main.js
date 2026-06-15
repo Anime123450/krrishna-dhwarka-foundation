@@ -337,17 +337,25 @@ async function initWhoSlider() {
     images = await res.json();
   } catch {}
 
-  // No images uploaded yet → keep the fallback logo that's already in the HTML
-  if (!images.length) return;
+  // Fall back to donation-themed stock images until the admin uploads their own
+  if (!images.length) {
+    images = [
+      { src: 'https://loremflickr.com/800/600/children,education,india?lock=21', title: 'Education for every child' },
+      { src: 'https://loremflickr.com/800/600/charity,volunteer,community?lock=22', title: 'Serving with compassion' },
+      { src: 'https://loremflickr.com/800/600/donation,help,hands?lock=23', title: 'Your support changes lives' },
+    ];
+  }
 
   const fallback = document.getElementById('whoFallback');
   if (fallback) fallback.remove();
 
-  wrap.innerHTML = images.map((g, i) => `
+  wrap.innerHTML = images.map((g, i) => {
+    const src = g.src || ('/uploads/gallery/' + g.filename);
+    return `
     <div class="who-slide${i === 0 ? ' active' : ''}">
-      <img src="/uploads/gallery/${g.filename}" alt="${(g.title || 'Our work').replace(/"/g, '')}" loading="lazy">
+      <img src="${src}" alt="${(g.title || 'Our work').replace(/"/g, '')}" loading="lazy" onerror="this.src='/images/logo2.png';this.style.objectFit='contain';this.style.background='#fff';this.style.padding='2rem'">
       ${g.title ? `<div class="who-cap">${escapeHTML(g.title)}</div>` : ''}
-    </div>`).join('') +
+    </div>`; }).join('') +
     (images.length > 1
       ? `<div class="who-dots">${images.map((_, i) => `<button class="${i === 0 ? 'active' : ''}" aria-label="Slide ${i+1}"></button>`).join('')}</div>`
       : '');
