@@ -28,8 +28,9 @@
 
 /* ── Reset ─────────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-/* Fluid root font-size — everything in rem scales up and adapts to the viewport */
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; font-size: clamp(16.5px, 15px + 0.5vw, 20px); }
+/* Fluid root font-size — rem-based so it scales with browser zoom & user
+   font-size settings, while the vw term adapts it to the viewport width */
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem); }
 body { font-family: var(--font-body); color: var(--text); background: var(--white); line-height: 1.7; font-size: 1.02rem; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
 img { max-width: 100%; height: auto; display: block; }
 a { text-decoration: none; color: inherit; }
@@ -185,9 +186,17 @@ section { padding: 92px 0; }
 .mv-card h3 { color: var(--navy); padding: 1.5rem 1.6rem .2rem; }
 .mv-card p { color: var(--muted); font-size: .95rem; padding: 0 1.6rem 1.9rem; margin: 0; }
 
-/* Trust badges (certificates page) */
-.trust-ico { width: 66px; height: 66px; margin: 0 auto 1rem; font-size: 30px; display: flex; align-items: center; justify-content: center; border-radius: 16px; background: rgba(201,168,76,.14); border: 1px solid rgba(201,168,76,.3); color: var(--gold-dark); }
-.trust-ico svg { width: 30px; height: 30px; }
+/* Why Trust Us cards (certificates page) */
+.trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.trust-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: transform .35s, box-shadow .35s, border-color .35s; }
+.trust-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: rgba(201,168,76,.4); }
+.trust-img { height: 175px; overflow: hidden; background: var(--cream); }
+.trust-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.trust-card:hover .trust-img img { transform: scale(1.06); }
+.trust-body { padding: 1.4rem 1.6rem 1.7rem; }
+.trust-body h4 { color: var(--navy); margin-bottom: .5rem; font-size: 1.15rem; }
+.trust-body p { color: var(--muted); font-size: .9rem; margin: 0; }
+@media (max-width: 820px) { .trust-grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; } }
 
 /* ── Stats (contained milestone card) ────────────────────────────────────────── */
 .stats-section { background: var(--white); padding: 56px 0; }
@@ -237,7 +246,7 @@ section { padding: 92px 0; }
 .footer-cta .container { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding-top: 2.2rem; padding-bottom: 2.2rem; position: relative; z-index: 1; flex-wrap: wrap; }
 .footer-cta-left h3 { color: var(--navy-dark); margin-bottom: .2rem; }
 .footer-cta-left p { color: rgba(18,22,58,.75); margin: 0; font-size: .95rem; }
-.newsletter-form { display: flex; gap: .6rem; flex: 1; max-width: 460px; min-width: 280px; }
+.newsletter-form { display: flex; gap: .6rem; flex: 1; max-width: 460px; min-width: 0; }
 .newsletter-form input { flex: 1; padding: .85rem 1.2rem; border: none; border-radius: 50px; font-size: .95rem; background: rgba(255,255,255,.95); color: var(--text); }
 .newsletter-form input:focus { outline: 2px solid var(--navy); }
 .newsletter-form .btn-primary { background: var(--navy); color: #fff; white-space: nowrap; box-shadow: none; }
