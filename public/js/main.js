@@ -298,26 +298,28 @@ function startAutoplay(slider) {
 async function loadCertificates() {
   const grid = document.getElementById('certGrid');
   if (!grid) return;
+  // The certificates page has its own loader (full list); this one is the
+  // home-page preview that shows only the first 3.
+  if (document.getElementById('noCerts')) return;
   grid.innerHTML = '<div class="loading"><div class="spinner"></div> Loading certificates…</div>';
   try {
     const res = await fetch('/api/certificates');
     const certs = await res.json();
     if (!certs.length) { grid.innerHTML = '<p style="text-align:center;color:var(--muted)">No certificates uploaded yet.</p>'; return; }
-    grid.innerHTML = certs.map(c => {
+    grid.innerHTML = certs.slice(0, 3).map((c, i) => {
       const isPDF = c.filename.toLowerCase().endsWith('.pdf');
       const thumb = isPDF
         ? `<div class="cert-thumb"><span class="pdf-icon ico" data-ico="file"></span></div>`
         : `<div class="cert-thumb"><img src="/uploads/certificates/${c.filename}" alt="${c.title}" loading="lazy"></div>`;
-      const link = isPDF
-        ? `<a href="/uploads/certificates/${c.filename}" target="_blank" class="btn btn-sm btn-navy" style="margin-top:.8rem">View PDF</a>`
-        : `<a href="/uploads/certificates/${c.filename}" target="_blank" class="btn btn-sm btn-navy" style="margin-top:.8rem">View</a>`;
-      return `<div class="cert-card">
+      const link = `<a href="/uploads/certificates/${c.filename}" target="_blank" class="btn btn-sm btn-navy" style="width:100%;justify-content:center">${isPDF ? 'View PDF' : 'View Certificate'}</a>`;
+      return `<div class="cert-card animate" style="animation-delay:${i*0.12}s">
         ${thumb}
         <div class="cert-info">
+          <span class="cert-tag">Verified</span>
           <h4>${c.title}</h4>
           ${c.description ? `<p>${c.description}</p>` : ''}
-          <small style="color:var(--muted)">${new Date(c.uploaded_at).toLocaleDateString('en-IN')}</small>
-          ${link}
+          <small style="color:var(--muted);display:block;margin-top:.5rem">${new Date(c.uploaded_at).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}</small>
+          <div style="margin-top:1rem">${link}</div>
         </div>
       </div>`;
     }).join('');
