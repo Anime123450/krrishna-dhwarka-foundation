@@ -81,16 +81,16 @@ async function loadAllCertificates() {
       const thumb = isPDF
         ? `<div class="cert-thumb"><span class="pdf-icon ico" data-ico="file"></span></div>`
         : `<div class="cert-thumb"><img src="/uploads/certificates/${c.filename}" alt="${c.title}" loading="lazy"></div>`;
-      const link = isPDF
-        ? `<a href="/uploads/certificates/${c.filename}" target="_blank" class="btn btn-sm btn-navy">View PDF</a>`
-        : `<a href="/uploads/certificates/${c.filename}" target="_blank" class="btn btn-sm btn-navy">View Full</a>`;
+      const label = isPDF ? 'View PDF' : 'View Certificate';
+      const link = `<a href="/uploads/certificates/${c.filename}" target="_blank" class="btn btn-sm btn-navy" style="width:100%;justify-content:center">${label}</a>`;
       return `<div class="cert-card">
         ${thumb}
         <div class="cert-info">
+          <span class="cert-tag">Verified</span>
           <h4>${c.title}</h4>
           ${c.description ? `<p>${c.description}</p>` : ''}
-          <small style="color:var(--muted)">${new Date(c.uploaded_at).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}</small>
-          <div style="margin-top:.8rem">${link}</div>
+          <small style="color:var(--muted);display:block;margin-top:.5rem">${new Date(c.uploaded_at).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}</small>
+          <div style="margin-top:1rem">${link}</div>
         </div>
       </div>`;
     }).join('');

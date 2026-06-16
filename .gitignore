@@ -21,6 +21,9 @@ public/uploads/gallery/*
 !public/uploads/banners/.gitkeep
 !public/uploads/gallery/.gitkeep
 
+# Keep the committed demo certificates (so they ship with the repo)
+!public/uploads/certificates/demo-*.svg
+
 # OS files
 .DS_Store
 Thumbs.db

@@ -94,6 +94,9 @@ if (adminCount.c === 0) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 });
 
+// Seed branded demo certificates (idempotent — writes files + DB rows if missing)
+try { require('./demo-certs').seed(db); } catch (e) { console.error('cert seed:', e.message); }
+
 // ─── Razorpay ─────────────────────────────────────────────────────────────────
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',

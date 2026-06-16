@@ -214,13 +214,15 @@ section { padding: 92px 0; }
 .cert-card { border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: var(--white); box-shadow: var(--shadow-sm); transition: transform .35s, box-shadow .35s, border-color .35s; }
 .cert-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: rgba(201,168,76,.5); }
 .cert-card:hover .cert-thumb img { transform: scale(1.06); }
-.cert-thumb { height: 180px; overflow: hidden; background: var(--cream); display: flex; align-items: center; justify-content: center; }
-.cert-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
-.cert-thumb .pdf-icon { font-size: 3rem; color: var(--gold-dark); display: inline-flex; }
-.cert-thumb .pdf-icon svg { width: 3rem; height: 3rem; }
-.cert-info { padding: 1.2rem; }
-.cert-info h4 { color: var(--navy); font-size: .95rem; margin-bottom: .3rem; }
-.cert-info p { color: var(--muted); font-size: .8rem; margin: 0; }
+.cert-thumb { height: 220px; overflow: hidden; background: linear-gradient(135deg, #fbf6ea 0%, #eef0fb 100%); display: flex; align-items: center; justify-content: center; padding: 16px; border-bottom: 1px solid var(--border); }
+.cert-thumb img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; box-shadow: 0 6px 18px rgba(26,31,78,.15); border-radius: 4px; transition: transform .4s ease; }
+.cert-card:hover .cert-thumb img { transform: scale(1.04); }
+.cert-thumb .pdf-icon { font-size: 3.4rem; color: var(--gold-dark); display: inline-flex; }
+.cert-thumb .pdf-icon svg { width: 3.4rem; height: 3.4rem; }
+.cert-info { padding: 1.3rem 1.4rem 1.5rem; }
+.cert-tag { display: inline-block; font-size: .65rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold-dark); background: rgba(201,168,76,.12); border: 1px solid rgba(201,168,76,.3); padding: .2rem .65rem; border-radius: 50px; margin-bottom: .6rem; }
+.cert-info h4 { color: var(--navy); font-size: 1.05rem; margin-bottom: .35rem; }
+.cert-info p { color: var(--muted); font-size: .85rem; margin: 0; }
 
 /* ── Donate CTA (light) ──────────────────────────────────────────────────────── */
 .donate-cta { background: linear-gradient(135deg, var(--cream) 0%, #fbf2e0 60%, #f4f6fc 100%); text-align: center; padding: 88px 0; position: relative; overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
