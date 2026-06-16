@@ -46,47 +46,56 @@
 <section style="background:var(--cream)">
   <div class="container">
     <div class="section-header">
-      <h2>Mission, Vision & Values</h2>
+      <span class="eyebrow">Our Foundation</span>
+      <h2>Mission, Vision &amp; Values</h2>
       <div class="divider"></div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start">
-      <div>
-        <div style="background:linear-gradient(135deg,#ffffff 0%,var(--cream) 100%);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:var(--radius-lg);padding:2.4rem;margin-bottom:1.8rem;box-shadow:var(--shadow-sm)">
-          <h3 style="color:var(--navy);margin-bottom:1rem;display:flex;align-items:center;gap:.9rem"><span class="ico" data-ico="target" style="width:52px;height:52px;font-size:27px;background:var(--grad-gold);color:var(--navy-dark);border-radius:14px;box-shadow:0 8px 18px rgba(201,168,76,.3)"></span> Our Mission</h3>
-          <p style="color:var(--muted);margin:0">To provide quality education and empowerment opportunities to underprivileged children and communities, ensuring that financial constraints never become a barrier to knowledge and growth. We bridge the gap between aspiration and opportunity.</p>
+    <div class="mvv-grid">
+      <!-- Mission & Vision as photo cards -->
+      <div style="display:flex;flex-direction:column;gap:2rem">
+        <div class="mv-photo-card">
+          <div class="mv-photo"><img src="https://images.pexels.com/photos/15119089/pexels-photo-15119089.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Children learning in a classroom" loading="lazy" onerror="this.style.display='none'"></div>
+          <div class="mv-photo-body">
+            <h3>Our Mission</h3>
+            <p>To provide quality education and empowerment opportunities to underprivileged children and communities, ensuring that financial constraints never become a barrier to knowledge and growth. We bridge the gap between aspiration and opportunity.</p>
+          </div>
         </div>
-        <div style="background:linear-gradient(135deg,#ffffff 0%,var(--cream) 100%);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:var(--radius-lg);padding:2.4rem;box-shadow:var(--shadow-sm)">
-          <h3 style="color:var(--navy);margin-bottom:1rem;display:flex;align-items:center;gap:.9rem"><span class="ico" data-ico="eye" style="width:52px;height:52px;font-size:27px;background:var(--grad-gold);color:var(--navy-dark);border-radius:14px;box-shadow:0 8px 18px rgba(201,168,76,.3)"></span> Our Vision</h3>
-          <p style="color:var(--muted);margin:0">A Bharat where every citizen, regardless of their background, has access to quality education, healthcare, and equal opportunities. A truly enlightened nation rooted in its cultural values, progressing with unity and purpose.</p>
+        <div class="mv-photo-card">
+          <div class="mv-photo"><img src="https://images.pexels.com/photos/31864391/pexels-photo-31864391.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Student pointing to a map of India" loading="lazy" onerror="this.style.display='none'"></div>
+          <div class="mv-photo-body">
+            <h3>Our Vision</h3>
+            <p>A Bharat where every citizen, regardless of their background, has access to quality education, healthcare, and equal opportunities. A truly enlightened nation rooted in its cultural values, progressing with unity and purpose.</p>
+          </div>
         </div>
       </div>
+      <!-- Core Values as photo rows -->
       <div>
-        <h3 style="color:var(--navy);margin-bottom:1.5rem">Our Core Values</h3>
-        <div class="values-grid">
-          <div class="value-item">
-            <div class="value-icon ico" data-ico="book"></div>
-            <div class="value-text">
+        <h3 class="values-heading">Our Core Values</h3>
+        <div class="value-list">
+          <div class="value-row">
+            <div class="value-thumb"><img src="https://images.pexels.com/photos/20556421/pexels-photo-20556421.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Children learning" loading="lazy" onerror="this.style.display='none'"></div>
+            <div>
               <h4>Education First</h4>
               <p>We believe education is the cornerstone of individual and societal progress.</p>
             </div>
           </div>
-          <div class="value-item">
-            <div class="value-icon ico" data-ico="shield"></div>
-            <div class="value-text">
+          <div class="value-row">
+            <div class="value-thumb"><img src="https://images.pexels.com/photos/6646926/pexels-photo-6646926.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Volunteers distributing aid" loading="lazy" onerror="this.style.display='none'"></div>
+            <div>
               <h4>Integrity</h4>
               <p>Every donation is used responsibly with full transparency and accountability.</p>
             </div>
           </div>
-          <div class="value-item">
-            <div class="value-icon ico" data-ico="heart"></div>
-            <div class="value-text">
+          <div class="value-row">
+            <div class="value-thumb"><img src="https://images.pexels.com/photos/6646816/pexels-photo-6646816.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Volunteer holding hands in support" loading="lazy" onerror="this.style.display='none'"></div>
+            <div>
               <h4>Compassion</h4>
               <p>We serve with a heart full of empathy and a commitment to human dignity.</p>
             </div>
           </div>
-          <div class="value-item">
-            <div class="value-icon ico" data-ico="leaf"></div>
-            <div class="value-text">
+          <div class="value-row">
+            <div class="value-thumb"><img src="https://images.pexels.com/photos/7475178/pexels-photo-7475178.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Hands holding green seedlings" loading="lazy" onerror="this.style.display='none'"></div>
+            <div>
               <h4>Sustainability</h4>
               <p>Our programs create lasting change that empowers communities for generations.</p>
             </div>
