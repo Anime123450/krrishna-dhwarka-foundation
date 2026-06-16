@@ -82,14 +82,14 @@ async function loadAllCertificates() {
       empty.style.display = 'block';
       return;
     }
-    grid.innerHTML = certs.map(c => {
+    grid.innerHTML = certs.map((c, i) => {
       const isPDF = c.filename.toLowerCase().endsWith('.pdf');
       const thumb = isPDF
         ? `<div class="cert-thumb"><span class="pdf-icon ico" data-ico="file"></span></div>`
         : `<div class="cert-thumb"><img src="/uploads/certificates/${c.filename}" alt="${c.title}" loading="lazy"></div>`;
       const label = isPDF ? 'View PDF' : 'View Certificate';
       const link = `<a href="/uploads/certificates/${c.filename}" target="_blank" class="btn btn-sm btn-navy" style="width:100%;justify-content:center">${label}</a>`;
-      return `<div class="cert-card">
+      return `<div class="cert-card animate" style="animation-delay:${(i % 9) * 0.08}s">
         ${thumb}
         <div class="cert-info">
           <span class="cert-tag">Verified</span>
