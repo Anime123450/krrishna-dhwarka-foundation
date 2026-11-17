@@ -8,16 +8,15 @@
   <img src="https://img.shields.io/badge/Node.js-v22%2B-339933?logo=nodedotjs&logoColor=white" />
   <img src="https://img.shields.io/badge/Express-4.x-000000?logo=express" />
   <img src="https://img.shields.io/badge/Razorpay-Integrated-02042B?logo=razorpay&logoColor=white" />
-  <img src="https://img.shields.io/badge/Status-Complete-brightgreen" />
 </p>
 
-This is a full-stack website I built as part of my internship for **Krrishna Dhwarka Foundation Bharat**, a charitable organization that works towards education and community welfare (*शिक्षा का प्रकाश* — Light of Education).
+A student project from my internship: a full-stack website for **Krrishna Dhwarka Foundation Bharat**, a charitable organization that works towards education and community welfare (*शिक्षा का प्रकाश* — Light of Education).
 
-The task was to build a complete charity website from scratch — with a public-facing website, donation collection through Razorpay, automatic PDF receipts, and a full admin panel to manage everything.
+The task was to build a charity website from scratch — with a public-facing website, donation collection through Razorpay, automatic PDF receipts, and an admin panel to manage everything.
 
 ---
 
-## What I Built
+## What's in it
 
 The project has two parts — the public website that anyone can visit, and a private admin panel that only the foundation team uses.
 
@@ -124,7 +123,7 @@ Here's the flow I'd suggest to see everything working:
 
 ## Tech Stack
 
-I used Node.js with Express for the backend. For the database, I used the built-in `node:sqlite` module that ships with Node.js 22 — this means no external database setup needed, it just works. Razorpay handles payments and I verify the payment signature on the server before marking anything as completed. PDFKit generates the receipts. Multer handles file uploads. JWT + bcrypt handle admin authentication.
+I used Node.js with Express for the backend. For the database, I used the built-in `node:sqlite` module that ships with Node.js 22 — this means no external database setup needed, no extra setup. Razorpay handles payments and I verify the payment signature on the server before marking anything as completed. PDFKit generates the receipts. Multer handles file uploads. JWT + bcrypt handle admin authentication.
 
 The frontend is plain HTML, CSS, and vanilla JavaScript — no React or any framework. The admin panel is a single-page app built entirely in one HTML file with inline JavaScript switching between sections. The design uses the foundation's navy blue and gold color scheme.
 
@@ -147,7 +146,7 @@ krrishna-dhwarka-foundation/
     ├── css/style.css          # All styling
     ├── js/main.js             # Shared JS (slider, cert loading)
     ├── images/logo.png        # Foundation logo
-    ├── admin/index.html       # Complete admin panel (SPA)
+    ├── admin/index.html       # Admin panel (SPA)
     └── uploads/               # Files uploaded via admin
         ├── certificates/
         └── banners/
@@ -186,4 +185,4 @@ krrishna-dhwarka-foundation/
 
 ---
 
-*Built by Animesh Sharma — Internship project for Krrishna Dhwarka Foundation Bharat*
+*Internship project for Krrishna Dhwarka Foundation Bharat*
